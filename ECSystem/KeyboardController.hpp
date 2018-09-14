@@ -36,6 +36,7 @@ public:
 		case SDLK_s:
 		    transform->getVelocity().setY( 1 );
 		    sprite->play( "walkDown" );
+		    break;
 		default:
 		    break;
 	    }

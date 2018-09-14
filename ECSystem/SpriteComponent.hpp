@@ -1,11 +1,13 @@
 #ifndef SPRITE_COMPONENT
 #define SPRITE_COMPONENT
 
-#include "SDL2/SDL.h"
+#include <map>
+#include <SDL2/SDL.h>
+#include "Animation.hpp"
 #include "Components.hpp"
 #include "../TextureManager.hpp"
-#include "Animation.hpp"
-#include <map>
+#include "../AssetManager.hpp"
+
 
 class SpriteComponent : public Component
 {
@@ -24,12 +26,12 @@ private:
 
 public:
 
-    std::map <const char*, Animation> animations;
+    std::map < std::string, Animation> animations;
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
     SpriteComponent() = default;
-    SpriteComponent( const char* path ) { setTexture( path ); }
-    SpriteComponent( const char* path, bool isAnim ) {
+    SpriteComponent( std::string texID ) { setTexture( texID ); }
+    SpriteComponent( std::string texID, bool isAnim ) {
 	this->isAnimated = isAnim;
 
 	Animation idle     = Animation ( 0, 7, 500 );
@@ -44,14 +46,14 @@ public:
 
 	play( "idle" );
 
-	setTexture( path );
+	setTexture( texID );
     }
 
-    ~SpriteComponent() { SDL_DestroyTexture( this->texture ); }
+    ~SpriteComponent() {}
 
 
     void setAnimIndx( int indx ) { this->animIndx = indx; }
-    void setTexture ( const char* path ) { this->texture = TextureManager::LoadTexture( path ); }
+    void setTexture ( std::string texID ) { this->texture = Game::assets->getTexture ( texID ); }
 
 
     int getAnimIndx() { return this->animIndx; }
@@ -81,7 +83,7 @@ public:
     }
     void draw() override { TextureManager::Draw( texture, srcRect, destRect, spriteFlip ); }
 
-    void play ( const char* animName ) {
+    void play ( std::string animName ) {
 	frames     = animations[ animName ].frames;
 	animIndx   = animations[ animName ].index;
 	frameDelay = animations[ animName ].delay;

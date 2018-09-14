@@ -5,6 +5,7 @@
 #include "EntityComponentSystem.hpp"
 #include "../TextureManager.hpp"
 #include "../Vector2D.hpp"
+#include "../AssetManager.hpp"
 
 
 class TileComponent : public Component
@@ -18,8 +19,8 @@ private:
 public:
 
     TileComponent() = default;
-    TileComponent( int srcX, int srcY, int x, int y, int tileSize, int tileScale, const char* path ) {
-	texture = TextureManager::LoadTexture( path );
+    TileComponent( int srcX, int srcY, int x, int y, int tileSize, int tileScale, std::string texID ) {
+	texture = Game::assets->getTexture( texID );
 
 	position.setX( x );
 	position.setY( y );

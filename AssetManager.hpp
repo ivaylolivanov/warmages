@@ -3,20 +3,25 @@
 
 #include <map>
 #include <string>
-#include "TextureManager.hpp"
 #include "Vector2D.hpp"
+#include "TextureManager.hpp"
 #include "ECSystem/EntityComponentSystem.hpp"
 
 class AssetManager
 {
 private:
-    std::map< std::string, SDL_Texture* > textures;
     Manager* manager;
+    std::map< std::string, SDL_Texture* > textures;
 
 public:
     AssetManager( Manager* mngr );
     ~AssetManager();
 
+    // Game ojbects management
+    void createProjectile( Vector2D pos, Vector2D vel, int range, int speed, std::string id );
+    void createGameObject( Vector2D pos, bool stat, int durability, std::string id );
+
+    // Texture management
     void addTexture( std::string id, const char* path );
     SDL_Texture* getTexture( std::string id );
 };
