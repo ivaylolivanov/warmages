@@ -63,16 +63,11 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     arenaMap->loadMap( "Assets/Warmage_arena.map", 25, 20 );
 
     player.addComponent< TransformComponent >( 2 );
+    player.getComponent< TransformComponent >().setStep( 0.15 );
     player.addComponent< SpriteComponent >( "player", true );
     player.addComponent< KeyboardConstroller >( );
     player.addComponent< ColliderComponent >( "player" );
     player.addGroup( groupPlayer );
-
-
-    assets->createProjectile( Vector2D( 400, 600 ), Vector2D( 2,0 ), 200, 1, "projectile");
-    assets->createProjectile( Vector2D( 600, 600 ), Vector2D( 2,1 ), 200, 1, "projectile");
-    assets->createProjectile( Vector2D( 300, 300 ), Vector2D( 2,0 ), 200, 1, "projectile");
-    assets->createProjectile( Vector2D( 250, 400 ), Vector2D( 2,0 ), 200, 1, "projectile");
 
 }
 

@@ -23,10 +23,9 @@ void AssetManager::createGameObject( Vector2D pos, bool stat, int durability, st
     auto& gameObject( manager->addEntity() );
     gameObject.addComponent< TransformComponent >( pos.getX(), pos.getY(), 32, 32, 1 );
     gameObject.addComponent< SpriteComponent >( id, false );
-    gameObject.addComponent< ObjectComponent >( 1, stat );
+    gameObject.addComponent< ObjectComponent >( durability, stat );
     gameObject.addComponent< ColliderComponent >( "GameObj" );
     gameObject.addGroup( Game::groupObjects );
-
 }
 
 void AssetManager::addTexture( std::string id, const char *path )

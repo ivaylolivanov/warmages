@@ -15,9 +15,9 @@ private:
     int height = 32;
     int scale  = 1; // also used as mass
 
-    float friction = 0.02;
+    float step;
     float acceleration;
-
+    float friction = 0.2;
 
 public:
 
@@ -58,14 +58,18 @@ public:
 
     void setXPos         ( int x )   { position.setX( x ); }
     void setYPos         ( int y )   { position.setY( y ); }
+    void setStep         ( float step ) { this->step = step; }
+    void setScale        ( int scl ) { this->scale = scl; }
     void setSpeed        ( int spd ) { this->speed = spd; }
     void setWidth        ( int w )   { this->width = w; }
     void setHeight       ( int h )   { this->height = h; }
-    void setScale        ( int scl ) { this->scale = scl; }
     void setPosition     ( Vector2D& pos ) { this->position = pos; }
     void setVelocity     ( Vector2D& vel ) { this->velocity = vel; }
     void setFriction     ( float fric ) { this->friction = fric; }
-    void setAcceleration ( float accel ) { this->acceleration = accel; }
+    void setAcceleration ( float acc ) { this->acceleration = acc; }
+    void incAcceleration ( float incAcc ) { this->acceleration += incAcc; }
+    void decAcceleration ( float decAcc ) { this->acceleration -= decAcc; }
+
 
 
     int getXPos           () { return position.getX(); }
@@ -74,8 +78,8 @@ public:
     int getWidth          () { return this->width; }
     int getHeight         () { return this->height; }
     int getScale          () { return this->scale; }
+    float getStep         () { return this->step; }
     float getFriction     () { return this->friction; }
-    float getAcceleration () { return this->acceleration; }
     Vector2D& getPosition () { return this->position; }
     Vector2D& getVelocity () { return this->velocity; }
 
@@ -83,15 +87,26 @@ public:
 
     void init() override {
 	velocity.zero();
+	this->acceleration = 0;
     }
 
     void update() override {
 
 	float tempX = position.getX();
 	float tempY = position.getY();
+	this->acceleration += this->step;
 
-	position.setX( tempX + velocity.getX() * this->speed );
-	position.setY( tempY + velocity.getY() * this->speed );
+	if( this->acceleration > 7 )
+	    this->acceleration = 7;
+
+	if( this->acceleration < 0 )
+	{
+	    this->acceleration = 0;
+	    velocity.zero();
+	}
+
+	position.setX( tempX + velocity.getX() * this->speed * this->friction * this->acceleration );
+	position.setY( tempY + velocity.getY() * this->speed * this->friction * this->acceleration );
     }
 
 };
