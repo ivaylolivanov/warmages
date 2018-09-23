@@ -23,6 +23,9 @@ public:
     void update() override {
 	if( Game::event.type == SDL_KEYDOWN )
 	{
+	    transform->getVelocity().setX( 0 );
+	    transform->getVelocity().setY( 0 );
+
 	    switch ( Game::event.key.keysym.sym ) {
 		case SDLK_w:
 		    transform->getVelocity().setY( -1 );

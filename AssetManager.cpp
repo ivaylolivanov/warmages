@@ -18,10 +18,10 @@ void AssetManager::createProjectile( Vector2D pos, Vector2D vel, int range, int 
 
 }
 
-void AssetManager::createGameObject( Vector2D pos, bool stat, int durability, std::string id )
+void AssetManager::createGameObject( Vector2D pos, bool stat, int scl, int durability, std::string id )
 {
     auto& gameObject( manager->addEntity() );
-    gameObject.addComponent< TransformComponent >( pos.getX(), pos.getY(), 32, 32, 1 );
+    gameObject.addComponent< TransformComponent >( pos.getX(), pos.getY(), 32, 32, scl );
     gameObject.addComponent< SpriteComponent >( id, false );
     gameObject.addComponent< ObjectComponent >( durability, stat );
     gameObject.addComponent< ColliderComponent >( "GameObj" );

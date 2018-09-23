@@ -57,6 +57,7 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     assets->addTexture( "terrain", "Assets/MapSpriteSheet.png" );
     assets->addTexture( "player" , "Assets/SpriteSheet.png" );
     assets->addTexture( "projectile", "Assets/frostbolt.png" );
+    assets->addTexture( "box", "Assets/Box.png" );
 
     arenaMap = new Map( "terrain", 2, 32 );
 
@@ -69,12 +70,16 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     player.addComponent< ColliderComponent >( "player" );
     player.addGroup( groupPlayer );
 
+    assets->createGameObject( Vector2D( 625, 450 ), false, 2, 1, "box" );
+    assets->createGameObject( Vector2D( 750, 450 ), false, 2, 1, "box" );
+
 }
 
 auto& tiles( manager.getGroup( Game::groupMap ) );
 auto& players( manager.getGroup( Game::groupPlayer ) );
 auto& colliders( manager.getGroup( Game::groupColliders ) );
 auto& projectiles( manager.getGroup( Game::groupProjectiles ) );
+auto& gameObjects( manager.getGroup( Game::groupObjects ) );
 
 void Game::handleEvents()
 {
@@ -103,7 +108,7 @@ void Game::update()
     for( auto& coll : colliders )
     {
 	SDL_Rect tempColl = coll->getComponent< ColliderComponent >().getCollider();
-	if( Collision::AABB( tempColl,playerColl ) )
+	if( Collision::AABB( tempColl, playerColl ) )
 	    player.getComponent< TransformComponent >().setPosition( playerPos );
     }
 
@@ -116,6 +121,20 @@ void Game::update()
 	{
 	    printf( "Player hit!\n" );
 	    proj->destroy();
+	}
+
+	for( auto& gObj : gameObjects )
+	{
+	    if( Collision::AABB(
+		    proj->getComponent< ColliderComponent >().getCollider(),
+		    gObj->getComponent< ColliderComponent >().getCollider() ) &&
+		!gObj->getComponent< ObjectComponent >().getIsStatic() )
+	    {
+		proj->destroy();
+		gObj->destroy();
+		printf( "An object was destroyed!\n" );
+	    }
+
 	}
 
     }
@@ -138,6 +157,7 @@ void Game::render()
     for ( auto& tile : tiles )       { tile->draw(); }
     for ( auto& plyr : players )     { plyr->draw(); }
     for ( auto& proj : projectiles ) { proj->draw(); }
+    for ( auto& gObj : gameObjects ) { gObj->draw(); }
 
     SDL_RenderPresent( renderer );
 }
