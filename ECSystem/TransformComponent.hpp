@@ -13,7 +13,7 @@ private:
     int speed  = 3;
     int width  = 32;
     int height = 32;
-    int scale  = 1; // also used as mass
+    int scale  = 1;
 
     float step;
     float acceleration;
@@ -80,6 +80,7 @@ public:
     int getScale          () { return this->scale; }
     float getStep         () { return this->step; }
     float getFriction     () { return this->friction; }
+    float getAcceleration () { return this->acceleration; }
     Vector2D& getPosition () { return this->position; }
     Vector2D& getVelocity () { return this->velocity; }
 

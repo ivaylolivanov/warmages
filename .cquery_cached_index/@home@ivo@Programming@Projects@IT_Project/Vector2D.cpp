@@ -52,6 +52,7 @@ Vector2D& Vector2D::divide( const Vector2D vec )
 }
 
 
+bool      Vector2D::operator==( Vector2D& vec ) { return ( this->x == vec.getX() && this->y == vec.getY() ) ? true : false; }
 Vector2D& Vector2D::operator+=( Vector2D& vec ) { return this->add( vec ); }
 Vector2D& Vector2D::operator-=( Vector2D& vec ) { return this->subtract( vec ); }
 Vector2D& Vector2D::operator*=( Vector2D& vec ) { return this->multiply( vec ); }

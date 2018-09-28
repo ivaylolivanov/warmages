@@ -58,6 +58,7 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     assets->addTexture( "player" , "Assets/SpriteSheet.png" );
     assets->addTexture( "projectile", "Assets/frostbolt.png" );
     assets->addTexture( "box", "Assets/Box.png" );
+    assets->addTexture( "stone","Assets/Stone.png" );
 
     arenaMap = new Map( "terrain", 2, 32 );
 
@@ -70,8 +71,10 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     player.addComponent< ColliderComponent >( "player" );
     player.addGroup( groupPlayer );
 
-    assets->createGameObject( Vector2D( 625, 450 ), false, 2, 1, "box" );
-    assets->createGameObject( Vector2D( 750, 450 ), false, 2, 1, "box" );
+    assets->createGameObject( Vector2D( 625, 450 ), false, 2, 10, 2, "box" );
+    assets->createGameObject( Vector2D( 750, 450 ), false, 2, 10, 3, "box" );
+    assets->createGameObject( Vector2D( 1000, 450 ), false, 2, 10, 4, "box" );
+    assets->createGameObject( Vector2D( 750, 750 ), true, 2, 1000, 400, "stone" );
 
 }
 
@@ -109,7 +112,9 @@ void Game::update()
     {
 	SDL_Rect tempColl = coll->getComponent< ColliderComponent >().getCollider();
 	if( Collision::AABB( tempColl, playerColl ) )
+	{
 	    player.getComponent< TransformComponent >().setPosition( playerPos );
+	}
     }
 
     for( auto& proj : projectiles )
@@ -130,14 +135,86 @@ void Game::update()
 		    gObj->getComponent< ColliderComponent >().getCollider() ) &&
 		!gObj->getComponent< ObjectComponent >().getIsStatic() )
 	    {
+		printf( "An object was hit!\n" );
 		proj->destroy();
-		gObj->destroy();
-		printf( "An object was destroyed!\n" );
+		gObj->getComponent< TransformComponent >().setStep( proj->getComponent< TransformComponent >().getStep() );
+		gObj->getComponent< TransformComponent >().setAcceleration( proj->getComponent< TransformComponent >().getAcceleration() );
+		gObj->getComponent< TransformComponent >().setVelocity( proj->getComponent< TransformComponent >().getVelocity() );
+		gObj->getComponent< ObjectComponent >().decDurability( 1 );
+	    }
+
+	    if( Collision::AABB(
+		    proj->getComponent< ColliderComponent >().getCollider(),
+		    gObj->getComponent< ColliderComponent >().getCollider() )
+		&&  gObj->getComponent< ObjectComponent >().getIsStatic() )
+	    {
+		printf( "An static game object was hit.\n" );
+		proj->destroy();
+		gObj->getComponent< ObjectComponent >().decDurability( 1 );
 	    }
 
 	}
 
     }
+
+    for( auto& gObj : gameObjects )
+    {
+	if( Collision::AABB(
+		player.getComponent< ColliderComponent >().getCollider(),
+		gObj->getComponent< ColliderComponent >().getCollider()
+		) )
+	{
+	    if( gObj->getComponent< ObjectComponent >().getIsStatic() )
+	    {
+		player.getComponent< TransformComponent >().setPosition( playerPos );
+		player.getComponent< TransformComponent >().setAcceleration( 0 );
+	    }
+	    else if( gObj->getComponent< TransformComponent >().getAcceleration() <= 0 )
+	    {
+
+		player.getComponent< TransformComponent >().setPosition( playerPos );
+		gObj->getComponent< TransformComponent >().setStep( player.getComponent< TransformComponent >().getStep() );
+		gObj->getComponent< TransformComponent >().setAcceleration( player.getComponent< TransformComponent >().getAcceleration() );
+		gObj->getComponent< TransformComponent >().setVelocity( player.getComponent< TransformComponent >().getVelocity() );
+		player.getComponent< TransformComponent >().setAcceleration( 0.0f );
+	    }
+	}
+
+
+	Vector2D tempGObjPos = gObj->getComponent< TransformComponent >().getPosition();
+	for( auto& nextGObj : gameObjects )
+	{
+	    if( nextGObj->getComponent< TransformComponent >().getPosition() == tempGObjPos )
+	    	continue;
+
+	    if( Collision::AABB(
+		    gObj->getComponent< ColliderComponent >().getCollider(),
+		    nextGObj->getComponent< ColliderComponent >().getCollider() ) )
+	    {
+		gObj->getComponent< TransformComponent >().setPosition( tempGObjPos );
+		if( !gObj->getComponent< ObjectComponent >().getIsStatic() &&
+		    !nextGObj->getComponent< ObjectComponent >().getIsStatic() )
+		{
+		    nextGObj->getComponent< TransformComponent >().setStep( gObj->getComponent< TransformComponent >().getStep() );
+		    nextGObj->getComponent< TransformComponent >().setAcceleration( gObj->getComponent< TransformComponent >().getAcceleration() );
+		    nextGObj->getComponent< TransformComponent >().setVelocity( gObj->getComponent< TransformComponent >().getVelocity() );
+		}
+		gObj->getComponent< TransformComponent >().setAcceleration( 0 );
+	    }
+	}
+
+	for( auto& coll : colliders )
+	{
+	    SDL_Rect tempColl = coll->getComponent< ColliderComponent >().getCollider();
+	    if( Collision::AABB( tempColl, gObj->getComponent< ColliderComponent >().getCollider() ) )
+	    {
+		gObj->getComponent< TransformComponent >().setPosition( tempGObjPos );
+		gObj->getComponent< TransformComponent >().setAcceleration( 0 );
+	    }
+	}
+    }
+
+
 
     camera.x = player.getComponent< TransformComponent >().getXPos() - 400;
     camera.y = player.getComponent< TransformComponent >().getYPos() - 320;

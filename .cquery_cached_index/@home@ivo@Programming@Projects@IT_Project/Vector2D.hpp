@@ -27,6 +27,7 @@ public:
     Vector2D& operator-=( Vector2D& vec );
     Vector2D& operator*=( Vector2D& vec );
     Vector2D& operator/=( Vector2D& vec );
+    bool      operator==( Vector2D& vec );
 
     Vector2D& operator* (const int& num);
     Vector2D& zero();

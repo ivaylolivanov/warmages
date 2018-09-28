@@ -21,7 +21,7 @@ public:
     void init() override {
 	transform = &entity->getComponent< TransformComponent >();
 	transform->setVelocity( this->velocity );
-	transform->setAcceleration( 4.0f );
+	transform->setAcceleration( 7.0f );
 	transform->setStep( 1.0f );
     }
 
