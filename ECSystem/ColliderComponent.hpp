@@ -2,7 +2,32 @@
 #define COLLIDER_COMPONENT
 
 #include <string>
+
+
+#ifdef _WIN32
+
+#include "SDL2\SDL.h"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "SDL2\SDL.h"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include <SDL2/SDL.h>
+
+#endif
+
+
+
 #include "Components.hpp"
 
 class ColliderComponent : public Component

@@ -1,5 +1,28 @@
 #include "AssetManager.hpp"
+
+#ifdef _WIN32
+
+#include "ECSystem\Components.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "ECSystem\Components.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "ECSystem/Components.hpp"
+
+#endif
+
+
 
 AssetManager::AssetManager( Manager* mngr ) : manager( mngr )
 {}

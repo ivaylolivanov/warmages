@@ -2,7 +2,29 @@
 #define POSITION_COMPONENT
 
 #include "Components.hpp"
+
+#ifdef _WIN32
+
+#include "..\Vector2D.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "..\Vector2D.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "../Vector2D.hpp"
+
+#endif
+
 
 class TransformComponent : public Component
 {

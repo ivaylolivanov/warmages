@@ -3,8 +3,33 @@
 
 #include <vector>
 #include <stdio.h>
+
+#ifdef _WIN32
+
+#include "SDL2\SDL.h"
+#include "SDL2\SDL_image.h"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "SDL2\SDL.h"
+#include "SDL2\SDL_image.h"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+#endif
+
+
 
 class AssetManager;
 class ColliderComponent;

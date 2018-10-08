@@ -2,8 +2,33 @@
 #define COLLISION
 
 #include <stdio.h>
+
+#ifdef _WIN32
+
+#include "SDL2\SDL.h"
+#include "ECSystem\ColliderComponent.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "SDL2\SDL.h"
+#include "ECSystem\ColliderComponent.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include <SDL2/SDL.h>
 #include "ECSystem/ColliderComponent.hpp"
+
+#endif
+
+
 
 class ColliderComponent;
 

@@ -1,7 +1,29 @@
 #ifndef OBJECT_COMPONENT
 #define OBJECT_COMPONENT
 
+
+#ifdef _WIN32
+
+#include "..\Vector2D.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "..\Vector2D.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "../Vector2D.hpp"
+
+#endif
+
 #include "Components.hpp"
 #include "EntityComponentSystem.hpp"
 

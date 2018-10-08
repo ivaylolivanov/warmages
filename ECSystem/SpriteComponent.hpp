@@ -1,13 +1,40 @@
 #ifndef SPRITE_COMPONENT
 #define SPRITE_COMPONENT
 
-#include <map>
+#ifdef _WIN32
+
+#include "SDL2\SDL.h"
+
+#include "..\TextureManager.hpp"
+#include "..\AssetManager.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "SDL2\SDL.h"
+#include "..\TextureManager.hpp"
+#include "..\AssetManager.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include <SDL2/SDL.h>
-#include "Animation.hpp"
-#include "Components.hpp"
 #include "../TextureManager.hpp"
 #include "../AssetManager.hpp"
 
+#endif
+
+
+
+#include <map>
+#include "Animation.hpp"
+#include "Components.hpp"
 
 class SpriteComponent : public Component
 {

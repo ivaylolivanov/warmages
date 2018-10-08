@@ -1,8 +1,33 @@
 #include "Map.hpp"
 #include "Game.hpp"
 #include <fstream>
+
+
+
+#ifdef _WIN32
+
+#include "ECSystem\EntityComponentSystem.hpp"
+#include "ECSystem\Components.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "ECSystem\EntityComponentSystem.hpp"
+#include "ECSystem\Components.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "ECSystem/EntityComponentSystem.hpp"
 #include "ECSystem/Components.hpp"
+
+#endif
 
 extern Manager manager;
 

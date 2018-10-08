@@ -5,7 +5,30 @@
 #include <string>
 #include "Vector2D.hpp"
 #include "TextureManager.hpp"
+
+#ifdef _WIN32
+
+#include "ECSystem\EntityComponentSystem.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "ECSystem\EntityComponentSystem.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "ECSystem/EntityComponentSystem.hpp"
+
+#endif
+
+
 
 class AssetManager
 {

@@ -1,7 +1,31 @@
 #ifndef KEYBOARD_CONTROLLER
 #define KEYBOARD_CONTROLLER
 
+
+#ifdef _WIN32
+
+#include "..\Game.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "..\Game.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include "../Game.hpp"
+
+#endif
+
+
+
 #include "EntityComponentSystem.hpp"
 #include "Components.hpp"
 #include "SpriteComponent.hpp"

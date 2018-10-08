@@ -1,11 +1,38 @@
 #ifndef TILE_COMPONENT
 #define TILE_COMPONENT
 
+#ifdef _WIN32
+
+#include "SDL2\SDL.h"
+#include "..\TextureManager.hpp"
+#include "..\Vector2D.hpp"
+#include "..\AssetManager.hpp"
+
+#endif
+
+
+
+#ifdef _WIN64
+
+#include "SDL2\SDL.h"
+#include "..\TextureManager.hpp"
+#include "..\Vector2D.hpp"
+#include "..\AssetManager.hpp"
+
+#endif
+
+
+
+#ifdef __linux__
+
 #include <SDL2/SDL.h>
-#include "EntityComponentSystem.hpp"
 #include "../TextureManager.hpp"
 #include "../Vector2D.hpp"
 #include "../AssetManager.hpp"
+
+#endif
+
+#include "EntityComponentSystem.hpp"
 
 
 class TileComponent : public Component
