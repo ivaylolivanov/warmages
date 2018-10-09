@@ -5,7 +5,7 @@
 
 #ifdef _WIN32
 
-#include "SDL2\SDL.h"
+#include <SDL.h>
 #include "ECSystem\ColliderComponent.hpp"
 
 #endif
@@ -14,7 +14,7 @@
 
 #ifdef _WIN64
 
-#include "SDL2\SDL.h"
+#include <SDL.h>
 #include "ECSystem\ColliderComponent.hpp"
 
 #endif

@@ -76,33 +76,6 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
 	isActive = false;
 
 
-    #ifdef _WIN32
-
-    assets->addTexture( "terrain", "Assets\MapSpriteSheet.png" );
-    assets->addTexture( "player" , "Assets\SpriteSheet.png" );
-    assets->addTexture( "projectile", "Assets\frostbolt.png" );
-    assets->addTexture( "box", "Assets\Box.png" );
-    assets->addTexture( "stone","Assets\Stone.png" );
-
-    arenaMap = new Map( "terrain", 2, 32 );
-
-    arenaMap->loadMap( "Assets\Warmage_arena.map", 25, 20 );
-
-    #endif
-
-    #ifdef _WIN64
-    assets->addTexture( "terrain", "Assets\MapSpriteSheet.png" );
-    assets->addTexture( "player" , "Assets\SpriteSheet.png" );
-    assets->addTexture( "projectile", "Assets\frostbolt.png" );
-    assets->addTexture( "box", "Assets\Box.png" );
-    assets->addTexture( "stone","Assets\Stone.png" );
-
-    arenaMap = new Map( "terrain", 2, 32 );
-
-    arenaMap->loadMap( "Assets\Warmage_arena.map", 25, 20 );
-    #endif
-
-    #ifdef __linux__
     assets->addTexture( "terrain", "Assets/MapSpriteSheet.png" );
     assets->addTexture( "player" , "Assets/SpriteSheet.png" );
     assets->addTexture( "projectile", "Assets/frostbolt.png" );
@@ -112,7 +85,6 @@ void Game::init( const char* title, int windowWidth, int windowHeight, bool full
     arenaMap = new Map( "terrain", 2, 32 );
 
     arenaMap->loadMap( "Assets/Warmage_arena.map", 25, 20 );
-    #endif
 
     player.addComponent< TransformComponent >( 2 );
     player.getComponent< TransformComponent >().setStep( 0.15 );

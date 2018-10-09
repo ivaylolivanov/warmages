@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
 
-#include "SDL2\SDL.h"
+#include <SDL.h>
 
 #include "..\TextureManager.hpp"
 #include "..\AssetManager.hpp"
@@ -14,7 +14,7 @@
 
 #ifdef _WIN64
 
-#include "SDL2\SDL.h"
+#include <SDL.h>
 #include "..\TextureManager.hpp"
 #include "..\AssetManager.hpp"
 
