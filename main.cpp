@@ -4,8 +4,6 @@
   - handle any user input
   - update all object eg. positions and other
   - render changes to the display
-
-
  */
 
 int main( int argc, char* argv[] )
@@ -19,7 +17,7 @@ int main( int argc, char* argv[] )
 
     Game* game = new Game();
 
-    game->init( "IT Project - Physics recreation", 800, 640, false );
+    game->init( "IT Project - Warmages", 800, 640, false );
     while ( game->isRunning() )
     {
 	frameStart = SDL_GetTicks();
@@ -27,6 +25,7 @@ int main( int argc, char* argv[] )
 	game->handleEvents();
 	game->update();
 	game->render();
+
 
 	frameTime = SDL_GetTicks() - frameStart;
 

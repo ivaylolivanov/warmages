@@ -29,6 +29,7 @@
 #include "Collision.hpp"
 #include "AssetManager.hpp"
 
+
 Map* arenaMap;
 Manager manager;
 
@@ -193,7 +194,6 @@ void Game::update()
 	    }
 	    else if( gObj->getComponent< TransformComponent >().getAcceleration() <= 0 )
 	    {
-
 		player.getComponent< TransformComponent >().setPosition( playerPos );
 		gObj->getComponent< TransformComponent >().setStep( player.getComponent< TransformComponent >().getStep() );
 		gObj->getComponent< TransformComponent >().setAcceleration( player.getComponent< TransformComponent >().getAcceleration() );
