@@ -71,12 +71,13 @@ public:
 		case SDLK_j:
 		    if( !isFired )
 		    {
-			Game::assets->createProjectile( Vector2D( transform->getXPos() + 15,
-								  transform->getYPos() + 70 ),
-							Vector2D( 0, 1 ),
-							200,
-							1,
-							"projectile" );
+			Game::assets->createProjectile(
+			    Vector2D( transform->getXPos() + 15,
+				      transform->getYPos() + 70 ),
+			    Vector2D( 0, 1 ),
+			    200,
+			    1,
+			    "projectile" );
 			isFired = true;
 		    }
 
@@ -84,36 +85,39 @@ public:
 		case SDLK_k:
 		    if( !isFired )
 		    {
-			Game::assets->createProjectile( Vector2D( transform->getXPos() + 15,
-								  transform->getYPos() - 70 ),
-							Vector2D( 0, -1 ),
-							200,
-							1,
-							"projectile" );
+			Game::assets->createProjectile(
+			    Vector2D( transform->getXPos() + 15,
+				      transform->getYPos() - 70 ),
+			    Vector2D( 0, -1 ),
+			    200,
+			    1,
+			    "projectile" );
 			isFired = true;
 		    }
 		    break;
 		case SDLK_h:
 		    if( !isFired )
 		    {
-			Game::assets->createProjectile( Vector2D( transform->getXPos() - 40,
-								  transform->getYPos() ),
-							Vector2D( -1, 0 ),
-							200,
-							1,
-							"projectile" );
+			Game::assets->createProjectile(
+			    Vector2D( transform->getXPos() - 40,
+				      transform->getYPos() ),
+			    Vector2D( -1, 0 ),
+			    200,
+			    1,
+			    "projectile" );
 			isFired = true;
 		    }
 		    break;
 		case SDLK_l:
 		    if( !isFired )
 		    {
-			Game::assets->createProjectile( Vector2D( transform->getXPos() + 70,
-								  transform->getYPos() ),
-							Vector2D( 1, 0 ),
-							200,
-							1,
-							"projectile" );
+			Game::assets->createProjectile(
+			    Vector2D( transform->getXPos() + 70,
+				      transform->getYPos() ),
+			    Vector2D( 1, 0 ),
+			    200,
+			    1,
+			    "projectile" );
 			isFired = true;
 		    }
 		    break;

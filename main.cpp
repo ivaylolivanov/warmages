@@ -14,7 +14,6 @@ int main( int argc, char* argv[] )
     Uint32 frameStart;
     int frameTime;
 
-
     Game* game = new Game();
 
     game->init( "IT Project - Warmages", 800, 640, false );
