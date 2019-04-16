@@ -124,7 +124,6 @@ void Game::handleEvents()
 
 void Game::update()
 {
-
     SDL_Rect playerColl = player.getComponent< ColliderComponent >().getCollider();
     Vector2D playerPos  = player.getComponent< TransformComponent >().getPosition();
 

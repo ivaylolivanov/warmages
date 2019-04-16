@@ -79,6 +79,31 @@ private:
     TransformComponent* transform;
 #+END_CODE
 The collider is rectangle, bounded around a given entity. It has tag, which is used during the collision resolution. Based on the tag different resolutions are undertaken. The transform component, sets the position of the collider.
+The collision detection happens in the update phase of the game loop.
+
+
+
+
+
+Before any collision resolution happens the current position of the player is saved in a variable.
+#+BEGIN_CODE c++
+Vector2D playerPos  = player.getComponent< TransformComponent >().getPosition();
+#+END_CODE
+The purpose of this is to have the position of the player when he has collided with something and should not go through it. When such collision happens this position is used to ``reset'' the player on the place where he was. The first collision check is done for the player and every other collider.
+#+BEGIN_CODE c++
+for( auto& coll : colliders )
+    {
+	SDL_Rect tempColl = coll->getComponent< ColliderComponent >().getCollider();
+	if( Collision::AABB( tempColl, playerColl ) )
+	{
+	    player.getComponent< TransformComponent >().setPosition( playerPos );
+	}
+    }
+#+END_CODE
+If collision occurs the player is returned back to his position before the collision. This way the objects in the game environment are simulated as solid, rigid bodies.
+The next check for collision is if a projectile has hit the player. In the current version, however it is redundant because the game environment does not have anything else that fires projectiles, except the player himself.
+After the collision detection between the player and a projectile, comes the check if a projectile has hit a game object. This
+
 
 * TODO Give definitions of basic terms. [/]
   - [ ] acceleration
