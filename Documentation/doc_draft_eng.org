@@ -12,7 +12,7 @@ That all matter because, considering the computing abilities of modern computers
 The game loop is the core of every game. It is basically a controlled, infinite loop, that contains the code that provides dynamics and interactivity for the game. It is usually split in different parts, in this project, it is composed of two main components - updating the scene and preparing the objects for drawing and rendering the changes. A third phase precedes these two, but its role is not as composite as the other. During it, the loop merely listens for an event that signals its interruption. Another feature is included in the game loop, but not detached in different structure - normalizing the frame rate. Before the start of the game loop, the program makes sure the needed libraries are correctly initialized, the required textures are loaded, there is an avatar, created for the user and sets up the initial scene of the environment.
 During the update phase all the objects are prepared to be rendered. In other words the code that implements the movement of the objects, the collision detection and resolution, user interaction, dealing damage and similar activities is being executed. If an object is "destroyed" or "defeated" it is removed from the scene.
 The second and final phase of the game loop is rendering the result of the previous phase. The order of displaying the objects on the screen is sequential. It is very important for the terrain to be drawn first and then everything else because it could draw the player's avatar underneath the map. This way the user would not be able to see the character, because the tiles of the area would be drawn over the sprite of the character. The exact rendering order is first - the map, because everything is supposed to be on the surface of the environment, then the player's avatar - it is the next most persistent object in the scene. After that the projectiles and the other game object like boxes and stones are displayed.
-** INCLUDE THE IMAGE - SCHEME FOR ENTITY COMPONENT SYSTEM
+** INCLUDE IMAGE - SCHEME FOR ENTITY COMPONENT SYSTEM
    The organization of the data in the game is handled with simple implementation of the design pattern 'Entity-Component-System'. Using its philosophy, the properties of the objects in the game are presented as 'Components', which give functionality to an 'Entity', when attached to it. All of the 'Entities', the created ones and the ones to be created, are controlled (managed) by the 'Manager'.
 One can think of 'Component' as containers. They do not possess complex logic. Each type of a component can be attached to an entity to provide some sort of a property. For example a 'Collider-component' makes an 'Entity' a rigid object.
 The 'Entities' are mainly used to provide an unique identifier, this way the environment becomes aware of the existence of single, individual thing. An 'Entity' functions as root object, that bundles set of 'components'.
@@ -69,7 +69,7 @@ switch ( Game::event.key.keysym.sym ) {
 	break;
 #+END_CODE
 When a pressed key is released, the velocity is set back to 0 and the accumulated acceleration is decreased gradually. This way the given entity receives acceleration.
-The moving game objects create danger of collision and raise the question how this collision should be resolved. In order to describe the implementation of the collision and its resolution, one first should take look at how the colliders are presented within the game.
+The moving game objects create danger of collision and raise the question how this collision should be resolved. In order to describe the implementation of the collision detection and its resolution, one first should take look at how the colliders are presented within the game.
 #+BEGIN_CODE c++
 class ColliderComponent : public Component
 {
@@ -77,9 +77,22 @@ private:
     std::string tag;
     SDL_Rect collider;
     TransformComponent* transform;
+}
 #+END_CODE
-The collider is rectangle, bounded around a given entity. It has tag, which is used during the collision resolution. Based on the tag different resolutions are undertaken. The transform component, sets the position of the collider.
-The collision detection happens in the update phase of the game loop.
+** INCLUDE IMAGE - COLLIDER
+The collider is rectangle, bounded around a given entity. It has its four axes aligned with the coordinate system, in which it resides. Which means the box cannot rotate itself. The collider is represented with class.
+#+BEGIN_CODE c++
+class ColliderComponent : public Component
+{
+private:
+    std::string tag;
+    SDL_Rect collider;
+    TransformComponent* transform;
+...
+};
+#+END_CODE
+To define the collider the type 'SDL_Rect' is used. The implementation uses tags to differentiate between different types of colliders, for example colliders for the terrain and the collider for the player. The tag has important role in the resolution of the collisions. The field of type 'TransformComponent' is initiated with the transform component of the whole entity. It is used to update the position and size of the collider.
+The collision detection happens in the update phase of the game loop. The very detection is simple implementation of the 'Axis aligned bounding box' method.
 
 
 
