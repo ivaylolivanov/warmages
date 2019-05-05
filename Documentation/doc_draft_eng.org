@@ -6,7 +6,7 @@
    The main goal of the project is to simulate basic physics in virtual environment. For this purpose an environment in the form of simple game was created. It provides an avatar, over which the user has control. This way the player can move across the field and interact with the environment.
 In most of the games the standard way of presenting information is via animations. This way motions and moving objects are interacting with the user, creating the sense of immersion, reality and consistency. The systems creating such effects in their core are basically physic engines. Such systems are essentially rule based constructions that generate animations.
 That all matter because, considering the computing abilities of modern computers, using more fully implemented physics system is becoming a tendency. This way, the virtual worlds would be created with more immersion and consistency for its player.
- This project is an attempt to create a simple game with mainly the most basic physics implemented - acceleration, collision, collision resolution, basic particles. The programming language, used for developing the project is c++ because it allows strict memory control by the developer,  has better overall performance and makes the code easily portable. The project also uses two third party libraries - SDL2 and SDL2-image. The first one made easier to render and handle events and the second helps loading the 'png' images.
+ This project is an attempt to create a simple game with mainly the most basic physics implemented - acceleration, collision, collision resolution, basic particles implemented as projectiles. The programming language, used for developing the project is c++ because it allows strict memory control by the developer,  has better overall performance and makes the code easily portable. The project also uses two third party libraries - SDL2 and SDL2-image. The first one made easier to render and handle events and the second helps loading the 'png' images.
 * Overview
   The goal of this section is to present summary of the used architectures, implemented features and a brief description of the phases in the game.
 The game loop is the core of every game. It is basically a controlled, infinite loop, that contains the code that provides dynamics and interactivity for the game. It is usually split in different parts, in this project, it is composed of two main components - updating the scene and preparing the objects for drawing and rendering the changes. A third phase precedes these two, but its role is not as composite as the other. During it, the loop merely listens for an event that signals its interruption. Another feature is included in the game loop, but not detached in different structure - normalizing the frame rate. Before the start of the game loop, the program makes sure the needed libraries are correctly initialized, the required textures are loaded, there is an avatar, created for the user and sets up the initial scene of the environment.
@@ -92,17 +92,12 @@ private:
 };
 #+END_CODE
 To define the collider the type 'SDL_Rect' is used. The implementation uses tags to differentiate between different types of colliders, for example colliders for the terrain and the collider for the player. The tag has important role in the resolution of the collisions. The field of type 'TransformComponent' is initiated with the transform component of the whole entity. It is used to update the position and size of the collider.
-The collision detection happens in the update phase of the game loop. The very detection is simple implementation of the 'Axis aligned bounding box' method.
-
-
-
-
-
-Before any collision resolution happens the current position of the player is saved in a variable.
+The collision detection happens in the update phase of the game loop. The very detection is simple implementation of the 'Axis aligned bounding box' method. The current implementation of the algorithm searches for a gap between any of the sides of two colliders. If none is found then there is no collision and a collision is searched between other two objects. Otherwise there is collision and an according resolution is undertaken. Before any collision resolution happens the current position of the player is saved in a variable. This way, the position of the player is saved in case he
 #+BEGIN_CODE c++
 Vector2D playerPos  = player.getComponent< TransformComponent >().getPosition();
 #+END_CODE
-The purpose of this is to have the position of the player when he has collided with something and should not go through it. When such collision happens this position is used to ``reset'' the player on the place where he was. The first collision check is done for the player and every other collider.
+enters in a collision with another game object and the player must not pass through it. When such collision happens this position is used to ``reset'' the player on the place where he was.
+Because of the different types of collision resolutions, the detection of collision occurrence is done by steps. The first collision check is done for the player and every other collider. This way the created virtual environment would not allow going through any object, making each object rigid.
 #+BEGIN_CODE c++
 for( auto& coll : colliders )
     {
@@ -113,11 +108,82 @@ for( auto& coll : colliders )
 	}
     }
 #+END_CODE
-If collision occurs the player is returned back to his position before the collision. This way the objects in the game environment are simulated as solid, rigid bodies.
-The next check for collision is if a projectile has hit the player. In the current version, however it is redundant because the game environment does not have anything else that fires projectiles, except the player himself.
-After the collision detection between the player and a projectile, comes the check if a projectile has hit a game object. This
+The next check for collision is for the projectiles. First is checked if a projectile has hit the player. In the current version, however it is redundant because the game environment does not have anything else that fires projectiles, except the player himself. The check is done in two step because there are different styles of collision resolution. The resolution for a projectile hitting a player is to first print a console message and then destroy the projectile. The resolution for a projectile hitting a game object is different because the game object should move if it is not static, in other words the game object functions like part of the terrain. The game objects have durability, which decreases with each hit of projectile. The static game objects have almost infinite durability. Which is why the resolution is done in different steps. The movable objects in the game scene are visualized as boxes. When projectile hits a box the step with which the projectile is moving is set as step to the box. The acceleration and the velocity of the projectile are also given to the box. This way is simulated the impulse, which should be passed to the game object when something hits it, in this case the projectile. After the passing of the impulse is done the durability of the object is decreased and the projectile is destroyed.
+#+BEGIN_CODE c++
+	    if( Collision::AABB(
+		    proj->getComponent< ColliderComponent >().getCollider(),
+		    gObj->getComponent< ColliderComponent >().getCollider() ) &&
+		!gObj->getComponent< ObjectComponent >().getIsStatic() )
+	    {
+		printf( "An object was hit!\n" );
+		proj->destroy();
+		gObj->getComponent< TransformComponent >().setStep( proj->getComponent< TransformComponent >().getStep() );
+		gObj->getComponent< TransformComponent >().setAcceleration( proj->getComponent< TransformComponent >().getAcceleration() );
+		gObj->getComponent< TransformComponent >().setVelocity( proj->getComponent< TransformComponent >().getVelocity() );
+		gObj->getComponent< ObjectComponent >().decDurability( 1 );
+	    }
+#+END_CODE
+The third different projectile collision resolution is done for projectile hitting a static game object, in which case a message printed, then the projectile is destroyed and the object takes decrease in its durability.
+#+BEGIN_CODE c++
+if( Collision::AABB(
+    proj->getComponent< ColliderComponent >().getCollider(),
+    gObj->getComponent< ColliderComponent >().getCollider() )
+    &&  gObj->getComponent< ObjectComponent >().getIsStatic() )
+    {
+	printf( "An static game object was hit.\n" );
+	proj->destroy();
+	gObj->getComponent< ObjectComponent >().decDurability( 1 );
+    }
+#+END_CODE
+When the player's avatar bumps into movable game object it is resolved similarly to when a projectile hits a box. The step, acceleration and the velocity of the player is given to the box, while the avatar is returned to his position before the collision. The acceleration of the player's character is set to zero.
+#+BEGIN_CODE c++
+player.getComponent< TransformComponent >().setPosition( playerPos );
+gObj->getComponent< TransformComponent >().setStep( player.getComponent< TransformComponent >().getStep() );
+gObj->getComponent< TransformComponent >().setAcceleration( player.getComponent< TransformComponent >().getAcceleration() );
+gObj->getComponent< TransformComponent >().setVelocity( player.getComponent< TransformComponent >().getVelocity() );
+player.getComponent< TransformComponent >().setAcceleration( 0.0f );
+#+END_CODE
+Colliding the player with a static game object, functions like bumping the character of the user into the end of the map. His position is reset on the one before the collision and his acceleration is set to 0.
+#+BEGIN_CODE c++
+		player.getComponent< TransformComponent >().setPosition( playerPos );
+		player.getComponent< TransformComponent >().setAcceleration( 0 );
+#+END_CODE
+The most complicated resolution is between two game objects. This might be induced when the user bumps into a game object and this game object is in a close proximity to another one and hits it. The resolution uses the position of a game object to remember where the object was before it bumped into another game object. When collision arises the object that was pushed into the one around it passes its step, acceleration and velocity to the other game object. After that its acceleration is set to 0.
+#+BEGIN_CODE c++
+nextGObj->getComponent< TransformComponent >().setStep( gObj->getComponent< TransformComponent >().getStep() );
+nextGObj->getComponent< TransformComponent >().setAcceleration( gObj->getComponent< TransformComponent >().getAcceleration() );
+nextGObj->getComponent< TransformComponent >().setVelocity( gObj->getComponent< TransformComponent >().getVelocity() );
+#+END_CODE
+When a game object is pushed into a static, immovable game object, it is reset on its position before the collision. Its acceleration is acceleration is set to 0 as well.
+Considered also part of the implementation of physics is the implementation of projectile as component. A projectile is defined by its current position in the coordinate system of the virtual world, the maximum range it should travel before it is destroyed, the currently covered distance and its velocity.
+#+BEGIN_CODE c++
+TransformComponent* transform;
+int range    = 0;
+int speed    = 0;
+int distance = 0;
+Vector2D velocity;
+#+END_CODE
+The projectile is destroyed if it has covered its set max range or to make the performance better when the projectile is no longer in the vision filed of the user. When either of the cases occurs, an according message is displayed.
+#+BEGIN_CODE c++
+if( distance > range )
+{
+    printf("Out of range\n");
+    entity->destroy();
+}
+else if( transform->getXPos() > Game::camera.x + Game::camera.w ||
+    transform->getXPos() < Game::camera.x ||
+    transform->getYPos() > Game::camera.y + Game::camera.h ||
+    transform->getYPos() < Game::camera.y )
+{
+    printf("Out of bounds\n");
+    entity->destroy();
+}
+#+END_CODE
 
 
+
+
+* TODO Describe the properties of a game object ( mainly because of the mass of it)
 * TODO Give definitions of basic terms. [/]
   - [ ] acceleration
   - [ ] velocity
