@@ -183,7 +183,7 @@ else if( transform->getXPos() > Game::camera.x + Game::camera.w ||
 
 
 
-* TODO Describe the properties of a game object ( mainly because of the mass of it)
+* TODO Describe the properties of a game object (mainly because of the mass of it)
 * TODO Give definitions of basic terms. [/]
   - [ ] acceleration
   - [ ] velocity
