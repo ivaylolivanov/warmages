@@ -12,6 +12,7 @@
 \usepackage{subcaption}
 \usepackage{beramono}
 \usepackage[utf8]{inputenc}
+\usepackage{listings}
 
 \graphicspath{ {./images/} }
 
@@ -91,13 +92,48 @@ Danach wird festgestellt, ob ein Spielobjekt mit einem anderen kollidiert. Auf d
 Das Spiel implementiert den Kamerastil ``Smooth Follow''. Mit anderen Worten, das ist eine Kamera, die dem Avatar des Spielers folgt. Die Kamera wird zuletzt während der Aktualisierungsphase der Spieleschleife eingestellt. Auf diese Weise wird eine auftretende Kollision behoben und die Kamera wäre nicht schlecht positioniert.\\
 Die letzte Phase der Spielschleife gibt das Ergebnis der vorherigen Phase wieder. Die Reihenfolge der Anzeige der Objekte auf dem Bildschirm ist sequentiell. Es ist sehr wichtig, dass zuerst das Gelände und dann alles andere gezeichnet wird, da dies dazu führen kann, dass der Avatar des Spielers unter die Karte gezogen wird und die Kacheln des Bereichs über das Sprite des Charakters gezogen werden, sodass der Benutzer den Charakter nicht sieht. Die genaue Renderreihenfolge ist zuerst --- die Karte, da sich alles auf der Oberfläche der Umgebung befinden soll, dann der Avatar des Spielers --- es ist das nächste beständigste Objekt in der Szene. Danach werden die Projektile und das andere Spielobjekt wie Kisten und Steine angezeigt.
 \paragraph{}
-Die Organisation der Daten im Spiel werden durch einfache Implementierung des Design-Musters ``Entity-Component-System'' erledigt. Festhaltend an seiner Philosophie werden die Eigenschaften der Objekte im Spiel als ``Komponenten'' dargestellt, die einem ``Ding'', wenn sie daran angehängt ist, Funktionalität verleihen. Alle ``Dinge'', die erstellt wurden und erstellt werden, werden vom ``Manager'' gesteuert (verwaltet).
+Die Organisation der Daten im Spiel werden durch einfache Implementierung des Design-Musters \textbf{Entity-Component-System} erledigt. Festhaltend an seiner Philosophie werden die Eigenschaften der Objekte im Spiel als \textit{\textbf{Components}} dargestellt, die einem \textit{\textbf{Entity}}, wenn sie daran angehängt ist, Funktionalität verleihen. Alle \textit{Entities}, die erstellt wurden und erstellt werden, werden vom \textit{\textbf{Manager (System)}} gesteuert (verwaltet).\\
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.25]{Scheme}
+  \includegraphics[scale=0.3]{Scheme}
   \caption{Entity-Component-System Verhältnisse}
   \label{fig:ECS}
 \end{figure}
 
+Man kann sich \textbf{Comopnents} als Container vorstellen. Sie besitzen keine komplexe Logik. Jeder Typ einer \textit{Component} kann an ein \textit{Entity} angehängt werden, um eine Art Eigenschaft bereitzustellen. Zum Beispiel macht eine \textit{Collider-Komponente} eine \textit{Entity} zu einem starren Objekt.\\
+Die \textbf{Entities} werden hauptsächlich verwendet, um einen eindeutige Bezeichner anzubieten. Auf diese Weise wird die Umgebung auf die Existenz einzelner, individueller \textit{Entities} aufmerksam. Eine \textbf{Entity} fungiert als Root-Objekt, das eine Reihe von \textit{Components} bündelt.\\
+Der \textbf{Manager (System)} fungiert als System-Teil des implementierten Entwurfsmusters. Es besitzt keine \textit{Entity}, sondern greift auf sie zu, um den Dateizyklus ihrer \textit{Components} zu verwalten.
+
+\section{Physik}
+In diesem Projekt geht es um Physik und deren Simulation in einer virtuellen Umgebung. Die grundlegenden Gesetze, die implementiert werden, sind Beschleunigung, Kollisionserkennung, Kollisionsauflösung und Partikel. Die ``Transform Component'' wurde zwecks die Simulation dieser Gesetze erstellt.
+
+\begin{lstlisting}[language=C++]
+  class TransformComponent : public Component
+  {
+    private:
+    Vector2D position;
+    Vector2D velocity;
+
+    int speed  = 3;
+    int width  = 32;
+    int height = 32;
+    int scale  = 1;
+
+    float step;
+    float acceleration;
+    float friction = 0.2;
+        ...
+        ...
+        ...
+  };
+\end{lstlisting}
+
+Diese \textit{Components} enthält die meisten erforderlichen Eigenschaften für ein Element, das in einem bestimmten Bereich definiert werden soll. Es werden auch die Attribute festgelegt, die für die Bewegung des Gegenstands in diesem Bereich erforderlich sind.
+Die Bewegung erfolgt über die Begriffe Geschwindigkeit, Beschleunigung, Reibung, Geschwindigkeit. \\
+Geschwindigkeit ist eine skalare Größe und kann als die Geschwindigkeit betrachtet werden, mit der ein Objekt die Entfernung zurücklegt. Stellen Sie sich ein Objekt mit hoher Geschwindigkeit vor. Gemäß der obigen Definition würde dies bedeuten, dass das Objekt in kurzer Zeit eine relativ große Entfernung zurücklegen würde. \\
+Die Geschwindigkeit ist dagegen eine Vektorgröße. Es bezieht sich auf die Geschwindigkeit, mit der ein Objekt seine Position ändert.\\
+Der Hauptunterschied zwischen den beiden Begriffen ergibt sich aus der Tatsache, dass Geschwindigkeit eine skalare Größe ist und die Richtung nicht verfolgt, während Geschwindigkeit eine Vektorgröße ist und richtungsbewusst ist. \\
+Man kann Beschleunigung als Vektorgröße definieren, die die Geschwindigkeit darstellt, mit der ein Objekt seine Geschwindigkeit ändert. Mit anderen Worten, ein Objekt beschleunigt, wenn es seine Geschwindigkeit ändert. \\
+Der Begriff Reibung ist definiert als jede Kraft, die einer Relativbewegung widersteht. \\
 \end{document}
