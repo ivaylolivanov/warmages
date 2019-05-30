@@ -130,10 +130,80 @@ In diesem Projekt geht es um Physik und deren Simulation in einer virtuellen Umg
 \end{lstlisting}
 
 Diese \textit{Components} enthält die meisten erforderlichen Eigenschaften für ein Element, das in einem bestimmten Bereich definiert werden soll. Es werden auch die Attribute festgelegt, die für die Bewegung des Gegenstands in diesem Bereich erforderlich sind.
-Die Bewegung erfolgt über die Begriffe Geschwindigkeit, Beschleunigung, Reibung, Geschwindigkeit. \\
-Geschwindigkeit ist eine skalare Größe und kann als die Geschwindigkeit betrachtet werden, mit der ein Objekt die Entfernung zurücklegt. Stellen Sie sich ein Objekt mit hoher Geschwindigkeit vor. Gemäß der obigen Definition würde dies bedeuten, dass das Objekt in kurzer Zeit eine relativ große Entfernung zurücklegen würde. \\
-Die Geschwindigkeit ist dagegen eine Vektorgröße. Es bezieht sich auf die Geschwindigkeit, mit der ein Objekt seine Position ändert.\\
-Der Hauptunterschied zwischen den beiden Begriffen ergibt sich aus der Tatsache, dass Geschwindigkeit eine skalare Größe ist und die Richtung nicht verfolgt, während Geschwindigkeit eine Vektorgröße ist und richtungsbewusst ist. \\
-Man kann Beschleunigung als Vektorgröße definieren, die die Geschwindigkeit darstellt, mit der ein Objekt seine Geschwindigkeit ändert. Mit anderen Worten, ein Objekt beschleunigt, wenn es seine Geschwindigkeit ändert. \\
+Die Bewegung erfolgt über die Begriffe Geschwindigkeit als skalare Größe, Beschleunigung, Reibung, Geschwindigkeit als Vektorgröße. \\
+\textbf{Geschwindigkeit als eine skalare Größe} kann als das Tempo betrachtet werden, mit dem ein Objekt die Entfernung zurücklegt. Stellen Sie sich ein Objekt mit hoher Geschwindigkeit vor. Gemäß der obigen Definition würde dies bedeuten, dass das Objekt in kurzer Zeit eine relativ große Entfernung zurücklegen würde. \\
+\textbf{Die Geschwindigkeit als eine Vektorgröße} Es bezieht sich auf die Rate, mit der ein Objekt seine Position ändert.\\
+Der Hauptunterschied zwischen den beiden Begriffen ergibt sich aus der Tatsache, dass Geschwindigkeit als skalare Größe die Richtung nicht verfolgt, während Geschwindigkeit als Vektorgröße richtungsbewusst ist. \\
+Man kann die \textbf{Beschleunigung} als Vektorgröße definieren, die die Geschwindigkeit darstellt, mit der ein Objekt sein Tempo ändert. Mit anderen Worten, ein Objekt beschleunigt sich, wenn es seine Schnelligkeit ändert.\\
 Der Begriff Reibung ist definiert als jede Kraft, die einer Relativbewegung widersteht. \\
+Die Beschleunigung wird als Eigenschaft der ``Transform Component'' eingeführt. Mit jedem Frame wird sein Wert um einen bestimmten Schritt erhöht.
+
+\begin{lstlisting}[language=C++]
+    this->acceleration += this->step;
+
+    if( this->acceleration > 7 )
+        this->acceleration = 7;
+
+    if( this->acceleration < 0 )
+    {
+        this->acceleration = 0;
+        velocity.zero();
+    }
+\end{lstlisting}
+
+Das implementierte Prinzip verwendet die Obergrenze für die Beschleunigung, um sie realistischer aussehen zu lassen.\\
+Das einzige bewegliche Objekt ist der Avatar des Spielers. Sein Schritt ist mit seiner Schaffung festgelegt.
+
+\begin{lstlisting}[language=C++]
+    player.addComponent< TransformComponent >( 2 );
+    player.getComponent< TransformComponent >().setStep( 0.15 );
+    player.addComponent< SpriteComponent >( "player", true );
+    player.addComponent< KeyboardConstroller >( );
+    player.addComponent< ColliderComponent >( "player" );
+    player.addGroup( groupPlayer );
+\end{lstlisting}
+
+Die tatsächliche Bewegung der Hauptfigur wird vom Benutzer gesteuert. Unter Verwendung der Definition von Trägheit --- die Tendenz eines Objekts, Änderungen seiner Geschwindigkeit zu widerstehen, passiert, was tatsächlich passiert, wenn der Benutzer den Avatar in der virtuellen Welt bewegt, indem Wert an die Geschwindigkeit der virtuellen Darstellung des Benutzers übergeben wird.\\
+
+\begin{lstlisting}[language=C++]
+    case SDLK_w:
+        transform->getVelocity().setY( -1 );
+        sprite->play( "walkUp" );
+	break;
+    case SDLK_a:
+	transform->getVelocity().setX( -1 );
+	sprite->play( "walkSideway" );
+	sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+	break;
+    case SDLK_d:
+	transform->getVelocity().setX( 1 );
+	sprite->play( "walkSideway" );
+	break;
+    case SDLK_s:
+	transform->getVelocity().setY( 1 );
+	sprite->play( "walkDown" );
+	break;
+\end{lstlisting}
+
+Zur leichteren Durchführung sind die Reibungsverläufe konstant. In Kombination mit der eingestellten Geschwindigkeit als Vektorgröße werden die Geschwindigkeit als Skalargröße und der Wert der Beschleunigung für das aktuelle Bild zur aktuellen Koordinate des Avatars addiert. Auf diese Weise wird das Zeichen im nächsten Frame an einer anderen Stelle angezeigt.
+
+\begin{lstlisting}[language=C++]
+    position.setX(
+        tempX
+        + velocity.getX()
+        * this->speed
+        * this->friction
+        * this->acceleration
+    );
+    position.setY(
+        tempY
+        + velocity.getY()
+        * this->speed
+        * this->friction
+        * this->acceleration
+    );
+\end{lstlisting}
+
+Die Bewegungsimplementierung funktioniert für alle Objekte gleich. Der Hauptunterschied besteht darin, dass die Geschwindigkeit des Avatars immer dann eingestellt wird, wenn der Benutzer entscheidet, während die anderen Spielobjekte aufgrund einer Kollision ihre Position ändern.
+
 \end{document}
