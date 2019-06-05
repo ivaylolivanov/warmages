@@ -155,7 +155,7 @@ nextGObj->getComponent< TransformComponent >().setAcceleration( gObj->getCompone
 nextGObj->getComponent< TransformComponent >().setVelocity( gObj->getComponent< TransformComponent >().getVelocity() );
 #+END_CODE
 When a game object is pushed into a static, immovable game object, it is reset on its position before the collision. Its acceleration is acceleration is set to 0 as well.
-Considered also part of the implementation of physics is the implementation of projectile as component. A projectile is defined by its current position in the coordinate system of the virtual world, the maximum range it should travel before it is destroyed, the currently covered distance and its velocity.
+Considered also part of the implementation of physics is the implementation of projectile as component. A projectile is defined by its current position in the virtual world, the maximum range it should travel before it is destroyed, the currently covered distance and its velocity.
 #+BEGIN_CODE c++
 TransformComponent* transform;
 int range    = 0;
