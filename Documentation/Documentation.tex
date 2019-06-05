@@ -318,10 +318,37 @@ nächsten Frame an einer anderen Stelle angezeigt.
     );
 \end{lstlisting}
 
-Die Bewegungsimplementierung funktioniert für alle Objekte gleich. Der
-Hauptunterschied besteht darin, dass die Geschwindigkeit des Avatars immer dann
-eingestellt wird, wenn der Benutzer entscheidet, während die anderen
-Spielobjekte aufgrund einer Kollision ihre Position ändern.\\
+Der Avatar des Spielers ist das einzige Objekt, das sich innerhalb der Welt frei
+bewegt. Die restlichen Spielobjekte werden normalerweise aufgrund der
+Kollisionsauflösung verschoben. Unter Spielobjekt fällt alles andere, was nicht
+das Gelände, der Spieler oder die abgefeuerten Geschosse ist und in der Welt
+angezeigt wird. Sie werden mit einer anderen Komponente --- Object Component
+--- implementiert.
+
+\begin{lstlisting}[language=C++]
+class ObjectComponent : public Component
+{
+private:
+    TransformComponent* transform;
+    int durability = 1;
+    bool isStatic = true;
+    int mass = 1;
+    ...
+    ...
+    ...
+};
+\end{lstlisting}
+
+Ein Objekt in der virtuellen Umgebung befindet sich in Ruhe, bis es einen Impuls
+erhält. Dieses Ereignis ist das Ergebnis einer Kollisionsauflösung. Wenn ein
+solches Ereignis auftritt, erhält das Spielobjekt eine Beschleunigung und
+verwendet seine Eigenschaftsmasse, um die Geschwindigkeit zu regulieren, mit der
+diese Beschleunigung abnimmt.
+
+\begin{lstlisting}[language=C++]
+  if(transform->getAcceleration() > 0)
+      transform->decAcceleration(transform->getStep() * mass);
+\end{lstlisting}
 
 \paragraph{}
 Wenn gibt es Objekte in Bewegung, besteht auch die Möglichkeit, dass sie
@@ -430,6 +457,118 @@ if( Collision::AABB(
         proj->getComponent<TransformComponent >().getVelocity()
     );
     gObj->getComponent<ObjectComponent>().decDurability(1);
+}
+\end{lstlisting}
+
+Die dritte unterschiedliche Projektilkollisionsauflösung wird durchgeführt, um
+ein statisches Spielobjekt mit einem Projektil zu treffen. In diesem Fall wird
+eine Meldung gedruckt, und das Projektil wird zerstört, und die Lebensdauer des
+Objekts nimmt ab.
+
+\begin{lstlisting}[language=C++]
+  if( Collision::AABB(
+    proj->getComponent<ColliderComponent>().getCollider(),
+    gObj->getComponent<ColliderComponent>().getCollider() )
+    && gObj->getComponent<ObjectComponent>().getIsStatic() )
+    {
+	printf("An static game object was hit.\n");
+	proj->destroy();
+	gObj->getComponent<ObjectComponent>().decDurability(1);
+    }
+\end{lstlisting}
+
+Wenn der Avatar des Spielers gegen ein bewegliches Spielobjekt stößt, wird dies
+ähnlich wie beim Auftreffen eines Projektils auf eine Schachtel aufgelöst. Der
+Schritt, die Beschleunigung und die Geschwindigkeit des Spielers werden an die
+Box übergeben, während der Avatar vor der Kollision an seine Position
+zurückgebracht wird. Die Beschleunigung des Spielers wird auf Null gesetzt.
+
+\begin{lstlisting}[language=C++]
+player.getComponent<TransformComponent>().setPosition(playerPos);
+gObj->getComponent<TransformComponent>().setStep(
+    player.getComponent<TransformComponent>().getStep()
+);
+gObj->getComponent<TransformComponent>().setAcceleration(
+    player.getComponent<TransformComponent>().getAcceleration()
+);
+gObj->getComponent<TransformComponent>().setVelocity(
+    player.getComponent<TransformComponent>().getVelocity()
+);
+player.getComponent<TransformComponent>().setAcceleration(0.0f);
+\end{lstlisting}
+
+Wenn der Spieler mit einem statischen Spielobjekt kollidiert, stößt er den
+Charakter gegen eine Wand. In der aktuellen Version der virtuellen Welt sind
+Wände die Endteile der Karte. Wenn ein solches Ereignis eintritt, wird die
+Position des Avatars des Spielers zurückgesetzt und seine Beschleunigung auf 0
+gesetzt.
+
+\begin{lstlisting}[language=C++]
+player.getComponent<TransformComponent>().setPosition(playerPos);
+player.getComponent<TransformComponent>().setAcceleration(0);
+\end{lstlisting}
+
+Die komplizierteste Lösung ist die Kollision zweier Spielobjekte. Dies kann
+ausgelöst werden, wenn der Benutzer oder ein Projektil gegen ein Spielobjekt
+stößt und sich dieses Spielobjekt in unmittelbarer Nähe eines anderen befindet
+und auf dieses trifft. Die Auflösung verwendet die Position eines Spielobjekts,
+um sich daran zu erinnern, wo sich das Objekt befand, bevor es gegen ein anderes
+Spielobjekt stieß. Wenn eine Kollision auftritt, überträgt das Objekt, das in
+das umgebende Objekt geschoben wurde, seine Schritte, Beschleunigungen und
+Geschwindigkeiten auf das andere Spielobjekt. Danach wird seine Beschleunigung
+auf 0 gesetzt.
+
+\begin{lstlisting}[language=C++]
+nextGObj->getComponent<TransformComponent>().setStep(
+    gObj->getComponent<TransformComponent>().getStep(
+));
+nextGObj->getComponent<TransformComponent(
+    gObj->getComponent<TransformComponent>().getAcceleration()
+);
+nextGObj->getComponent<TransformComponent>().setVelocity(
+  gObj->getComponent<TransformComponent>().getVelocity()
+);
+\end{lstlisting}
+
+Ein weiterer Bestandteil der Implementierung der Physik ist die Implementierung
+des Projektils als Komponente. Ein Projektil wird durch seine aktuelle Position
+in der virtuellen Welt, die maximale Reichweite, die es zurücklegen sollte,
+bevor es zerstört wird, die aktuell zurückgelegte Distanz und seine
+Geschwindigkeit definiert.
+
+\begin{lstlisting}[language=C++]
+class ProjectileComponent : public Component
+{
+private:
+    TransformComponent* transform;
+    int range    = 0;
+    int speed    = 0;
+    int distance = 0;
+    Vector2D velocity;
+    ...
+    ...
+    ...
+}
+\end{lstlisting}
+
+Das Projektil wird zerstört, wenn es seinen festgelegten Maximalbereich
+überschritten hat oder um die Leistung zu verbessern, wenn sich das Projektil
+nicht mehr in der Sichtweite des Benutzers befindet. In beiden Fällen wird eine
+entsprechende Meldung angezeigt.
+
+\begin{lstlisting}[language=C++]
+if( distance > range )
+{
+    printf("Out of range\n");
+    entity->destroy();
+}
+else if(transform->getXPos() > Game::camera.x + Game::camera.w ||
+    transform->getXPos() < Game::camera.x ||
+    transform->getYPos() > Game::camera.y + Game::camera.h ||
+    transform->getYPos() < Game::camera.y)
+{
+    printf("Out of bounds\n");
+    entity->destroy();
 }
 \end{lstlisting}
 
