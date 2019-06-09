@@ -15,6 +15,7 @@
 \usepackage{listings}
 
 \graphicspath{ {./images/} }
+\renewcommand{\figurename}{Abb.}
 
 \title{IT Projekt}
 \date{06.05.2019}
@@ -43,7 +44,7 @@ ein Computerspiel.
 \end{figure}
 
 \justify
-Der Benutzer steuert eine virtuelle Figur.
+Der Benutzer steuert eine virtuelle Figur, die Avatar genannt ist.
 
 \begin{figure}[h]
   \captionsetup{justification=raggedright,singlelinecheck=false}
@@ -53,8 +54,8 @@ Der Benutzer steuert eine virtuelle Figur.
 \end{figure}
 
 \justify
-Der Avatar kann sich in dem Terrain bewegen und Eiszapfen in jeden Richtung
-feuern. Die Anfangsszene dem Spiel hat vier Spielobjekte --- drei Kasten und
+Der Avatar kann sich in dem Terrain bewegen und Eiszapfen in jeder Richtung
+feuern. Die Anfangsszene des Spiels hat vier Spielobjekte --- drei Kasten und
 ein Stein.
 
 \begin{figure}[h]
@@ -75,70 +76,69 @@ ein Stein.
 
 \justify
 Mit den Kisten kann der Anwender interagieren. Das heißt, dass der Benutzer sie
-herumschubsen kann und auch auf sie Eiszapfen zu schießen. Das kann zu der
+leiten kann und auch auf sie Eiszapfen zu schießen. Das kann zu der
 Zerstörung diesen Kästen führen. Der Stein, der auch statisch Spielobjekt
 genannt wird, funktioniert wie eine Wand. Er ist unbeweglich und auch
 unverwüstlich. \\
 In meisten virtuellen Produkten wird die Information durch irgendeiner Art von
-Animation präsentiert. Animation bedeutet sichtbare Bewegung. Das kann sehr
-wichtig sein, weil es ein Software viel mehr intuitiv macht. In den meisten
+Animation vorgestellt. Unter Animation versteht man sichtbare Bewegung. Das kann
+sehr wichtig sein, weil es ein Software viel mehr intuitiv macht. In den meisten
 Fällen die Systeme, die solche Lebhaftigkeit machen, sind Physik-Engines. \\
 Implementieren die Physik in einem virtuellen Welt macht die Animationen, die
 Bewegungen und die Wechselwirkungen in diesem Welt immer flüssiger und
 realistischer und gibt immersives Erlebnis. Die Bilder sieht schöner und
 lebendiger aus. Diese Eigenschaften sind wichtig nicht nur in den
-Computerspielen, sonder auch in der virtual Reality, in der Software für
+Computerspielen, sonder auch in der virtuelle Realität, in der Software für
 visuelle Effekte und in den Anwendungen für Physik Simulation und für
 Animation. \\
 Für dieses Projekt wird ein Spiel erstellt, wo die grundlegende physikalischer
 Gesetze gelten. In der virtuellen Welt gibt es eine Implementation von
 Beschleunigung, Kollisionserkennung, Kollisionsauflösung und elementare
 Teilchen. \\
-Solche Umfeldern sind kompliziert und braucht viel Speicher. Man soll auch auf
+Solche Umfeldern sind kompliziert und brauchen viel Speicher. Man soll auch auf
 der Leistung der Software passen. Diese virtuelle Umgebung wird durch die
 Programmiersprache C++ erstellt. Auf diese Weise wird der Speicher sehr streng
 kontrolliert. Die Sprache erlaubt bessere Performance und macht die Anwendung
-auch portabel. Für den Computergrafik teil wird die Programmiere-Bibliothek
+auch portabel. Für den Computergrafik Teil wird die Programmiere-Bibliothek
 ``SDL2'' benutzt. Die ``png'' Bilder werden mit der Hilfe von der
 Programmiere-Bibliothek ``SDL2-image'' geladen.\\
 
-\newpage
-\section{Überblick}
-Wenn man das ganze Projekt betrachtet, kann man die Teile des Spiels bemerken
---- Initialisierung, die Spiel-Schleife und Befreiung des Speichers.\\
+\section{Überblick --- Bestandteile und Funktionsweise}
+Wenn man das ganze Projekt betrachtet, kann man die folgende Teile des Spiels
+bemerken --- Initialisierung, die Spiel-Schleife und Befreiung des Speichers. \\
 Während der Initialisierung wird das Fenster, wo die virtuelle Welt dargestellt
 wird. Die Texturen werden geladen. Danach wird die initiale Szene des Spiels
 geschaffen.\\
 Die nächste Phase ist die Spiel-Schleife. Das ist der Kern jedes Spiels --- ein
 endlose, aber überwachte Kreislauf. Hier werden die Dynamik und die
-Interaktivität der virtuellen Welt durchgeführt. Hier werden 4 Teile erkennt
---- das Normieren von der Bildrate, ein Prüfung auf Ausfahrt, Aktualisieren der
-Spielszene und Vorbereiten den Objekten zum Rendern und das Rendern der
-Änderungen. Damit die Bildfrequenz normieren können, wird die Zeit der Rahmen
-für ein Iteration der Spiel-Schleife gefunden. Wenn diese Uhrzeit ist kleiner
-als die festgelegte, dann wird die Bildrate nachdrücklich verzögert. Das ist
-wichtig, weil auf diese Weise die verschiedene Computer die gleich Bildfrequenz
-haben werden.\\
+Interaktivität der virtuellen Welt durchgeführt. Die folgende 4 teile werden
+erkennt --- das Normieren von der Bildrate, eine Prüfung auf Ausfahrt,
+Aktualisieren der Spielszene und Vorbereiten den Objekten zum Rendern und das
+Rendern der Änderungen. Damit die Bildfrequenz normieren können, wird die Zeit
+der Rahmen für ein Iteration der Spiel-Schleife gefunden. Wenn diese Uhrzeit
+kleiner als die festgelegte ist, dann wird die Bildrate nachdrücklich verzögert.
+Das ist wichtig, weil auf diese Weise die verschiedene Computer die gleiche
+Bildfrequenz haben werden.\\
 Der Kreis ist endlos, aber das bedeutet nicht, dass das Spiel kein Schluss hat.
-Drücken ein Taster wird als ein Event registriert. Auf diese Weise kommuniziert
-der Benutzer mit der virtuellen Umgebung. Solche Veranstaltungen werden
-gesammelt und werden bearbeitet. In diesem Projekt bricht die Schleife das
-Drücken auf den Knopf ``ESC''.\\
+Drücken einer Taster wird als ein Event registriert. Auf diese Weise
+kommuniziert der Benutzer mit der virtuellen Umgebung. Solche Veranstaltungen
+werden gesammelt und werden bearbeitet. In diesem Projekt bricht die Schleife
+das Drücken auf den Knopf ``ESC''.\\
 Die Update-Phase des Spiel-Loops wird zunächst sichergestellt, dass alle
 Objekte, die in der Szene zerstört oder nicht mehr benötigt werden, keinen
-Speicher mehr beanspruchen. Mit anderen Worten, hält die Liste der Objekte, die
+Speicher mehr brauchen. Mit anderen Worten, hält die Liste der Objekte, die
 verfolgt werden, aktuell. Dies ist entscheidend für die Leistung des Spiels.
-Nachdem bestätigt wurde, welche Spielobjekte in der Spielszene aktiv sind,
+Nachdem es bestätigt wurde, welche Spielobjekte in der Spielszene aktiv sind,
 werden ihre Position und ihr Zustand aktualisiert.\\
 Danach wird festgestellt, ob ein Spielobjekt mit einem anderen kollidiert. Auf
 der Grundlage ihrem Typ wird eine bestimmte Art von Kollisionsauflösung
 ausgegeben. Die Auflösungen sind unterschiedlich, daher müssen sie getrennt
-werden. Im Projekt wird bei der ersten Kollision geprüft, ob der Avatar des
-Spielers mit einem anderen starren Körper kollidiert ist. Wenn dieser Schritt
-bestanden ist, kommt der Test, dass das Projektil mit einem beliebigen Objekt in
-der Spielszene kollidiert. Zunächst wird festgestellt, ob ein anderer Avatar
-getroffen wurde, was im aktuellen Projektstatus überflüssig ist, da der Benutzer
-der einzige ist, der einen hat. Wenn dann ein Projektil ein Spielobjekt
+werden. In diesem Projekt wird bei der ersten Kollision geprüft, ob der Avatar
+des Spielers mit einem anderen starren Körper kollidiert ist. Wenn dieser
+Schritt bestanden ist, kommt der Test, dass das Projektil mit einem beliebigen
+Objekt in der Spielszene kollidiert. Zunächst wird festgestellt, ob ein anderer
+Avatar getroffen wurde, was im aktuellen Projektstatus überflüssig ist, da der
+Benutzer der einzige ist, der einen hat. Wenn dann ein Projektil ein Spielobjekt
 geschlagen hat, werden zwei Arten von Lösungen implementiert. Wenn das
 getroffene Spielobjekt statisch ist, wird das Projektil einfach zerstört. Wenn
 das Spielobjekt jedoch beweglich ist, wird der Impuls des Aufpralls an es
@@ -154,22 +154,22 @@ wird eine auftretende Kollision behoben und die Kamera wäre nicht schlecht
 positioniert. \\
 Die letzte Phase der Spielschleife gibt das Ergebnis der vorherigen Phase
 wieder. Die Reihenfolge der Anzeige der Objekte auf dem Bildschirm ist
-sequentiell. Es ist sehr wichtig, dass zuerst das Gelände und dann alles andere
-gezeichnet wird, da dies dazu führen kann, dass der Avatar des Spielers unter
-die Karte gezogen wird und die Kacheln des Bereichs über das Sprite des
-Charakters gezogen werden, sodass der Benutzer den Charakter nicht sieht. Die
-genaue Renderreihenfolge ist zuerst --- die Karte, da sich alles auf der
-Oberfläche der Umgebung befinden soll, dann der Avatar des Spielers --- es ist
-das nächste beständigste Objekt in der Szene. Danach werden die Projektile und
-das andere Spielobjekt wie Kisten und Steine angezeigt. \\
-\paragraph{}
+sequentiell. Es ist sehr wichtig, zuerst das Gelände und dann alles andere zu
+zeichnen. Ansonsten würden wichtige Elemente des Spiels, wie der Avatar, unter
+die Karte gezogen. Infolgedessen könnte der Benutzer nur den leeren Bereich
+sehen. Die genaue Renderreihenfolge ist wie folgt --- zuerst die Karte, wo sich
+alles auf der Oberfläche der Umgebung befinden soll, dann der Avatar des
+Spielers --- er ist das nächste beständigste Objekt in der Szene. Danach werden
+die Projektile und die andere Spielobjekte wie Kisten und Steine angezeigt. \\
+
+\section{System Abbau}
 Die Organisation der Daten im Spiel werden durch einfache Implementierung des
-Design-Musters \textbf{Entity-Component-System} erledigt. Festhaltend an seiner
-Philosophie werden die Eigenschaften der Objekte im Spiel als
-\textit{\textbf{Components}} dargestellt, die einem \textit{\textbf{Entity}},
-wenn sie daran angehängt ist, Funktionalität verleihen. Alle \textit{Entities},
-die erstellt wurden und erstellt werden, werden vom
-\textit{\textbf{Manager (System)}} gesteuert (verwaltet). \\
+Design-Musters \textbf{Entity-Component-System} erledigt. Festhaltend an der
+Philosophie dieses Design-Muster werden die Eigenschaften der Objekte im Spiel
+als \textit{Components} dargestellt. Ihre Aufgabe besteht darin, bestimmte
+Funktionen bereitzustellen, wenn sie einer \textit{Entity} zugeordnet sind.
+Alle \textit{Entities}, die erstellt wurden und erstellt werden, werden vom
+\textit{Manager (System)} gesteuert (verwaltet). \\
 
 \begin{figure}[h]
   \centering
@@ -180,18 +180,18 @@ die erstellt wurden und erstellt werden, werden vom
 
 Man kann sich \textbf{Comopnents} als Container vorstellen. Sie besitzen keine
 komplexe Logik. Jeder Typ einer \textit{Component} kann an ein \textit{Entity}
-angehängt werden, um eine Art Eigenschaft bereitzustellen. Zum Beispiel macht
+angebracht werden, um eine Art Eigenschaft bereitzustellen. Zum Beispiel macht
 eine \textit{Collider-Komponente} eine \textit{Entity} zu einem starren Objekt. \\
 Die \textbf{Entities} werden hauptsächlich verwendet, um einen eindeutige
 Bezeichner anzubieten. Auf diese Weise wird die Umgebung auf die Existenz
 einzelner, individueller \textit{Entities} aufmerksam. Eine \textbf{Entity}
-fungiert als Root-Objekt, das eine Reihe von \textit{Components} bündelt. \\
-Der \textbf{Manager (System)} fungiert als System-Teil des implementierten
+wirkt als Root-Objekt, das eine Reihe von \textit{Components} bündelt. \\
+Der \textbf{Manager (System)} wirkt als System-Teil des implementierten
 Entwurfsmusters. Es besitzt keine \textit{Entity}, sondern greift auf sie zu, um
 den Dateizyklus ihres \textit{Components} zu verwalten.
 
 \section{Physik}
-In diesem Projekt geht es um Physik und deren Simulation in einer virtuellen
+In diesem Projekt geht es um die Physik und deren Simulation in einer virtuellen
 Umgebung. Die grundlegenden Gesetze, die implementiert werden, sind
 Beschleunigung, Kollisionserkennung, Kollisionsauflösung und Partikel. Das
 \textit{Transform Component} wurde zwecks die Simulation dieser Gesetze erstellt.
@@ -222,20 +222,20 @@ ein Element, das in einem bestimmten Bereich definiert werden soll. Es werden
 auch die Attribute festgelegt, die für die Bewegung des Gegenstands in diesem
 Bereich erforderlich sind.
 Die Bewegung erfolgt über die Begriffe Geschwindigkeit als skalare Größe,
-Beschleunigung, Reibung, Geschwindigkeit als Vektorgröße. \\
+Beschleunigung, Reibung und Geschwindigkeit als Vektorgröße. \\
 \textbf{Geschwindigkeit als eine skalare Größe} kann als das Tempo betrachtet
 werden, mit dem ein Objekt die Entfernung zurücklegt. Stellen Sie sich ein
 Objekt mit hoher Geschwindigkeit vor. Gemäß der obigen Definition würde dies
 bedeuten, dass das Objekt in kurzer Zeit eine relativ große Entfernung
 zurücklegen würde. \\
-\textbf{Die Geschwindigkeit als eine Vektorgröße} Es bezieht sich auf die Rate,
-mit der ein Objekt seine Position ändert.\\
+\textbf{Die Geschwindigkeit als eine Vektorgröße} bezieht sich auf die Rate, mit
+der ein Objekt seine Position ändert.\\
 Der Hauptunterschied zwischen den beiden Begriffen ergibt sich aus der Tatsache,
 dass Geschwindigkeit als skalare Größe die Richtung nicht verfolgt, während
 Geschwindigkeit als Vektorgröße richtungsbewusst ist. \\
 Man kann die \textbf{Beschleunigung} als Vektorgröße definieren, die die
-Geschwindigkeit darstellt, mit der ein Objekt sein Tempo ändert. Mit anderen
-Worten, ein Objekt beschleunigt sich, wenn es seine Schnelligkeit ändert.\\
+Geschwindigkeit darstellt, mit der ein Objekt sein Tempo ändert. In anderen
+Worten, ein Objekt beschleunigt sich, wenn es seine Geschwindigkeit ändert.\\
 Der Begriff Reibung ist definiert als jede Kraft, die einer Relativbewegung
 widersteht. \\
 Die Beschleunigung wird als Eigenschaft des \textit{Transform Components}
@@ -256,7 +256,7 @@ Mit jedem Frame wird sein Wert um einen bestimmten Schritt erhöht.
 \end{lstlisting}
 
 Das implementierte Prinzip verwendet die Obergrenze für die Beschleunigung, um
-sie realistischer aussehen zu lassen.\\
+sie realistischer aussehen.\\
 Das einzige bewegliche Objekt ist der Avatar des Spielers. Sein Schritt ist mit
 seiner Schaffung festgelegt.
 
@@ -269,11 +269,13 @@ seiner Schaffung festgelegt.
     player.addGroup( groupPlayer );
 \end{lstlisting}
 
-Die tatsächliche Bewegung der Hauptfigur wird vom Benutzer gesteuert. Unter
-Verwendung der Definition von Trägheit --- die Tendenz eines Objekts, Änderungen
-seiner Geschwindigkeit zu widerstehen, passiert, was tatsächlich passiert, wenn
-der Benutzer den Avatar in der virtuellen Welt bewegt, indem Wert an die
-Geschwindigkeit der virtuellen Darstellung des Benutzers übergeben wird.\\
+Die tatsächliche Bewegung der Hauptfigur wird vom Benutzer gesteuert. Durch
+Drücken einer der Tasten --- ``w'', ``s'', ``a'' oder ``d'' wird die Trägheit des
+Avatars verletzt. Die Definition dieses Inertionsprinzips ist definiert als die
+Tendenz eines Objekts, Änderungen seiner Geschwindigkeit als Vektorgröße zu
+widerstehen. Mit anderen Worten, wenn der Spieler die Bewegungstasten drückt,
+wird die Trägheit des Avatars verletzt und seine Geschwindigkeit als Vektorgröße
+geändert, wodurch sich seine Position ändert. \\
 
 \begin{lstlisting}[language=C++]
     case SDLK_w:
@@ -351,7 +353,7 @@ diese Beschleunigung abnimmt.
 \end{lstlisting}
 
 \paragraph{}
-Wenn gibt es Objekte in Bewegung, besteht auch die Möglichkeit, dass sie
+Wenn es Objekte in Bewegung gibt, besteht auch die Möglichkeit, dass sie
 kollidieren. Die Erkennung für dieses Ereignis erfolgt in jedem Frame am Ende
 der Aktualisierungsphase. Um eine Kollision zwischen Objekten zu erkennen, wurde
 das \textit{Collider Component} implementiert.
@@ -371,7 +373,7 @@ das \textit{Collider Component} implementiert.
 
 Der Collider ist ein Rechteck um seine Entities mit zusätzlichen Eigenschaften
 --- Tag und Transform Component. Jedes Entity, an der eine solche Komponente
-angebracht ist, wird in die Kollisionserkennung einbezogen und gilt als starrer
+angebracht ist, wird in die Kollisionserkennung einbezogen und gilt als starren
 Körper. Das Tag des Colliders bestimmt seinen Typ. Auf diese Weise kann bei
 einer Kollision zwischen zwei Entities leichter bestimmt werden, wie sie
 behandelt werden sollen. Für die Position innerhalb der virtuellen Welt des
@@ -404,7 +406,7 @@ Anstoßen in einem starren Körper simulieren. Aufgrund der unterschiedlichen
 Arten von Kollisionsauflösungen erfolgt die Erkennung des Auftretens von
 Kollisionen schrittweise. Die erste Kollisionsprüfung wird für den Spieler und
 jeden anderen Kollider durchgeführt. Auf diese Weise kann in der erstellten
-virtuellen Umgebung kein Objekt durchlaufen werden.
+virtuellen Umgebung kein Objekt durchgelaufen werden.
 
 \begin{lstlisting}[language=C++]
 for( auto& coll : colliders )
@@ -422,9 +424,9 @@ ein Projektil den Spieler getroffen hat. In der aktuellen Version ist es jedoch
 redundant, da in der Spielumgebung außer dem Player nichts anderes vorhanden
 ist, das Projektile abfeuert. Die Prüfung erfolgt in zwei Schritten, da es
 unterschiedliche Arten der Kollisionsauflösung gibt. Die Lösung für ein
-Projektil, das einen Spieler trifft, besteht darin, zuerst eine Konsolenmeldung
-zu Debugging-Zwecken auszudrucken und dann das Projektil zu zerstören. Die
-Auflösung für ein Projektil, das auf ein Spielobjekt trifft, ist
+Projektil, das einen Spieler trifft, besteht darin, dass zuerst eine
+Konsolenmeldung zu Debugging-Zwecken ausgedruckt wird und dann das Projektil zu
+zerstören. Die Auflösung für ein Projektil, das auf ein Spielobjekt trifft, ist
 unterschiedlich, da sich das Spielobjekt bewegen sollte, wenn es nicht statisch
 ist, mit anderen Worten, das Spielobjekt funktioniert wie ein Teil des Geländes.
 Die Spielobjekte haben eine Haltbarkeit, die mit jedem Treffer des Projektils
@@ -533,7 +535,7 @@ nextGObj->getComponent<TransformComponent>().setVelocity(
 Ein weiterer Bestandteil der Implementierung der Physik ist die Implementierung
 des Projektils als Komponente. Ein Projektil wird durch seine aktuelle Position
 in der virtuellen Welt, die maximale Reichweite, die es zurücklegen sollte,
-bevor es zerstört wird, die aktuell zurückgelegte Distanz und seine
+bevor es zerstört wird, die aktuelle zurückgelegte Distanz und seine
 Geschwindigkeit definiert.
 
 \begin{lstlisting}[language=C++]
