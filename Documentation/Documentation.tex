@@ -574,4 +574,25 @@ else if(transform->getXPos() > Game::camera.x + Game::camera.w ||
 }
 \end{lstlisting}
 
+\section{Fazit}
+Ziel des Projekts war es, die gängigsten physikalischen Gesetze in eine
+virtuelle Umgebung umzusetzen. Als Ergebnis wurde ein einfaches Spiel erstellt,
+in dem die Implementierung demonstriert wurde. Der Benutzer interagiert mit der
+virtuellen Welt über eine Avatar-Figur, die er steuert. Die Hauptfigur des
+Spiels bewegt sich, wie es die implementierte Physik demonstriert ---
+Beschleunigung, Kollisionserkennung und -auflösung, einfache Partikel. \\
+Um die Einführung der Physik in das Spiel und die Pflege der Daten zu
+vereinfachen, wurde eine einfache Konstruktion ähnlich dem Designmuster
+``Entity-Component-System'' entwickelt. \\
+Die Physik ist so einfach wie möglich implementiert. Aufgrund dieses Spiels
+bleiben Objekte mit geringerer Masse, die beschleunigt und gegen ein Objekt mit
+größerer Masse gestoßen werden, ineinander stecken. Die implementierte
+Kollisionserkennung würde auch abnehmen, wenn eine genauere Erkennung
+erforderlich ist. \\
+Das Projekt ist der Einstieg in die Computerphysik. Von diesem Punkt an könnte
+man sich auf das Polieren des implementierten Algorithmus konzentrieren, so dass
+die Implementierungen in einem breiteren Bereich von Fällen anwendbar sind. Es
+ist auch eine gültige Entwicklung, einen Teil des Gesetzes über die optische
+Physik umzusetzen.
+
 \end{document}
