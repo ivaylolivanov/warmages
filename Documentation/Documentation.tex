@@ -101,14 +101,14 @@ Programmiersprache C++ erstellt. Auf diese Weise wird der Speicher sehr streng
 kontrolliert. Die Sprache erlaubt bessere Performance und macht die Anwendung
 auch portabel. Für den Computergrafik Teil wird die Programmiere-Bibliothek
 ``SDL2'' benutzt. Die ``png'' Bilder werden mit der Hilfe von der
-Programmiere-Bibliothek ``SDL2-image'' geladen.\\
+Programmiere-Bibliothek ``SDL2-image'' geladen. \\
 
 \section{Überblick --- Bestandteile und Funktionsweise}
 Wenn man das ganze Projekt betrachtet, kann man die folgende Teile des Spiels
 bemerken --- Initialisierung, die Spiel-Schleife und Befreiung des Speichers. \\
 Während der Initialisierung wird das Fenster, wo die virtuelle Welt dargestellt
 wird. Die Texturen werden geladen. Danach wird die initiale Szene des Spiels
-geschaffen.\\
+geschaffen. \\
 Die nächste Phase ist die Spiel-Schleife. Das ist der Kern jedes Spiels --- ein
 endlose, aber überwachte Kreislauf. Hier werden die Dynamik und die
 Interaktivität der virtuellen Welt durchgeführt. Die folgende 4 teile werden
@@ -118,18 +118,18 @@ Rendern der Änderungen. Damit die Bildfrequenz normieren können, wird die Zeit
 der Rahmen für ein Iteration der Spiel-Schleife gefunden. Wenn diese Uhrzeit
 kleiner als die festgelegte ist, dann wird die Bildrate nachdrücklich verzögert.
 Das ist wichtig, weil auf diese Weise die verschiedene Computer die gleiche
-Bildfrequenz haben werden.\\
+Bildfrequenz haben werden. \\
 Der Kreis ist endlos, aber das bedeutet nicht, dass das Spiel kein Schluss hat.
 Drücken einer Taster wird als ein Event registriert. Auf diese Weise
 kommuniziert der Benutzer mit der virtuellen Umgebung. Solche Veranstaltungen
 werden gesammelt und werden bearbeitet. In diesem Projekt bricht die Schleife
-das Drücken auf den Knopf ``ESC''.\\
+das Drücken auf den Knopf ``ESC''. \\
 Die Update-Phase des Spiel-Loops wird zunächst sichergestellt, dass alle
 Objekte, die in der Szene zerstört oder nicht mehr benötigt werden, keinen
 Speicher mehr brauchen. Mit anderen Worten, hält die Liste der Objekte, die
 verfolgt werden, aktuell. Dies ist entscheidend für die Leistung des Spiels.
 Nachdem es bestätigt wurde, welche Spielobjekte in der Spielszene aktiv sind,
-werden ihre Position und ihr Zustand aktualisiert.\\
+werden ihre Position und ihr Zustand aktualisiert. \\
 Danach wird festgestellt, ob ein Spielobjekt mit einem anderen kollidiert. Auf
 der Grundlage ihrem Typ wird eine bestimmte Art von Kollisionsauflösung
 ausgegeben. Die Auflösungen sind unterschiedlich, daher müssen sie getrennt
@@ -229,13 +229,13 @@ Objekt mit hoher Geschwindigkeit vor. Gemäß der obigen Definition würde dies
 bedeuten, dass das Objekt in kurzer Zeit eine relativ große Entfernung
 zurücklegen würde. \\
 \textbf{Die Geschwindigkeit als eine Vektorgröße} bezieht sich auf die Rate, mit
-der ein Objekt seine Position ändert.\\
+der ein Objekt seine Position ändert. \\
 Der Hauptunterschied zwischen den beiden Begriffen ergibt sich aus der Tatsache,
 dass Geschwindigkeit als skalare Größe die Richtung nicht verfolgt, während
 Geschwindigkeit als Vektorgröße richtungsbewusst ist. \\
 Man kann die \textbf{Beschleunigung} als Vektorgröße definieren, die die
 Geschwindigkeit darstellt, mit der ein Objekt sein Tempo ändert. In anderen
-Worten, ein Objekt beschleunigt sich, wenn es seine Geschwindigkeit ändert.\\
+Worten, ein Objekt beschleunigt sich, wenn es seine Geschwindigkeit ändert. \\
 Der Begriff Reibung ist definiert als jede Kraft, die einer Relativbewegung
 widersteht. \\
 Die Beschleunigung wird als Eigenschaft des \textit{Transform Components}
@@ -256,7 +256,7 @@ Mit jedem Frame wird sein Wert um einen bestimmten Schritt erhöht.
 \end{lstlisting}
 
 Das implementierte Prinzip verwendet die Obergrenze für die Beschleunigung, um
-sie realistischer aussehen.\\
+sie realistischer aussehen. \\
 Das einzige bewegliche Objekt ist der Avatar des Spielers. Sein Schritt ist mit
 seiner Schaffung festgelegt.
 
