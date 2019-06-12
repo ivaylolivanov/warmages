@@ -7,12 +7,14 @@
   footinclude,
   BCOR5mm,
 ]{article}
+\usepackage{float}
 \usepackage{ragged2e}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{beramono}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{wrapfig}
 
 \graphicspath{ {./images/} }
 \renewcommand{\figurename}{Abb.}
@@ -30,51 +32,14 @@
   \listoffigures
 \end{titlepage}
 
-\justify
 \section{Einführung}
 Für ein Hauptziel hat dieses Projekt eine virtuelle Umgebung zu bilden und in
 dieser Umwelt die grundlegende Physik zu simulieren. Die virtuelle Welt ähnelt
-ein Computerspiel.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.25]{VirtualEnvironment}
-  \caption{Die virtuelle Umgebung}
-  \label{fig:Umgebung}
-\end{figure}
-
-\justify
+ein Computerspiel. \\
 Der Benutzer steuert eine virtuelle Figur, die Avatar genannt ist.
-
-\begin{figure}[h]
-  \captionsetup{justification=raggedright,singlelinecheck=false}
-  \includegraphics[scale=0.10]{MageCharacter}
-  \caption{Avatar}
-  \label{fig:Avatar}
-\end{figure}
-
-\justify
 Der Avatar kann sich in dem Terrain bewegen und Eiszapfen in jeder Richtung
 feuern. Die Anfangsszene des Spiels hat vier Spielobjekte --- drei Kasten und
-ein Stein.
-
-\begin{figure}[h]
-  \begin{subfigure}{0.5\textwidth}
-    \includegraphics[width=0.3\linewidth, height=2cm]{Box}
-    \caption{Kasten}
-    \label{fig:Kasten}
-  \end{subfigure}
-  \begin{subfigure}{0.5\textwidth}
-    \includegraphics[width=0.3\linewidth, height=2cm]{Stone}
-    \caption{Stein}
-    \label{fig:Stein}
-  \end{subfigure}
-
-  \caption{Spielobjekte}
-  \label{fig:Spielobjekte}
-\end{figure}
-
-\justify
+ein Stein. \\
 Mit den Kisten kann der Anwender interagieren. Das heißt, dass der Benutzer sie
 leiten kann und auch auf sie Eiszapfen zu schießen. Das kann zu der
 Zerstörung diesen Kästen führen. Der Stein, der auch statisch Spielobjekt
@@ -108,7 +73,15 @@ Wenn man das ganze Projekt betrachtet, kann man die folgende Teile des Spiels
 bemerken --- Initialisierung, die Spiel-Schleife und Befreiung des Speichers. \\
 Während der Initialisierung wird das Fenster, wo die virtuelle Welt dargestellt
 wird. Die Texturen werden geladen. Danach wird die initiale Szene des Spiels
-geschaffen. \\
+geschaffen.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.25]{VirtualEnvironment}
+  \caption{Die initiale Szene des Spiels}
+  \label{fig:Umgebung}
+\end{figure}
+
 Die nächste Phase ist die Spiel-Schleife. Das ist der Kern jedes Spiels --- ein
 endlose, aber überwachte Kreislauf. Hier werden die Dynamik und die
 Interaktivität der virtuellen Welt durchgeführt. Die folgende 4 teile werden
@@ -130,15 +103,47 @@ Speicher mehr brauchen. Mit anderen Worten, hält die Liste der Objekte, die
 verfolgt werden, aktuell. Dies ist entscheidend für die Leistung des Spiels.
 Nachdem es bestätigt wurde, welche Spielobjekte in der Spielszene aktiv sind,
 werden ihre Position und ihr Zustand aktualisiert. \\
-Danach wird festgestellt, ob ein Spielobjekt mit einem anderen kollidiert. Auf
-der Grundlage ihrem Typ wird eine bestimmte Art von Kollisionsauflösung
+Danach wird festgestellt, ob ein Spielobjekt mit einem anderen kollidiert.
+
+\begin{figure}[h]
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.5\linewidth, height=1.9cm]{Box}
+    \caption{Kasten}
+    \label{fig:Kasten}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.5\linewidth, height=1.9cm]{Stone}
+    \caption{Stein}
+    \label{fig:Stein}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.5\linewidth, height=1.9cm]{frostbolt}
+    \caption{Projektil}
+    \label{fig:Projektil}
+  \end{subfigure}
+
+  \caption{Spielobjekte}
+  \label{fig:Spielobjekte}
+\end{figure}
+
+Auf der Grundlage ihrem Typ wird eine bestimmte Art von Kollisionsauflösung
 ausgegeben. Die Auflösungen sind unterschiedlich, daher müssen sie getrennt
-werden. In diesem Projekt wird bei der ersten Kollision geprüft, ob der Avatar
-des Spielers mit einem anderen starren Körper kollidiert ist. Wenn dieser
-Schritt bestanden ist, kommt der Test, dass das Projektil mit einem beliebigen
-Objekt in der Spielszene kollidiert. Zunächst wird festgestellt, ob ein anderer
-Avatar getroffen wurde, was im aktuellen Projektstatus überflüssig ist, da der
-Benutzer der einzige ist, der einen hat. Wenn dann ein Projektil ein Spielobjekt
+werden.
+
+\newpage %% New page because of formatting issues
+\begin{wrapfigure}{l}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.25\textwidth, height=3cm]{MageCHaracter}
+    \caption{Avatar}
+    \label{fig:Avatar}
+\end{wrapfigure}
+
+In diesem Projekt wird bei der ersten Kollision geprüft, ob der Avatar des
+Spielers mit einem anderen starren Körper kollidiert ist. Wenn dieser Schritt
+bestanden ist, kommt der Test, dass das Projektil mit einem beliebigen Objekt in
+der Spielszene kollidiert. Zunächst wird festgestellt, ob ein anderer Avatar
+getroffen wurde, was im aktuellen Projektstatus überflüssig ist, da der Benutzer
+der einzige ist, der einen hat. Wenn dann ein Projektil ein Spielobjekt
 geschlagen hat, werden zwei Arten von Lösungen implementiert. Wenn das
 getroffene Spielobjekt statisch ist, wird das Projektil einfach zerstört. Wenn
 das Spielobjekt jedoch beweglich ist, wird der Impuls des Aufpralls an es
@@ -169,9 +174,9 @@ Philosophie dieses Design-Muster werden die Eigenschaften der Objekte im Spiel
 als \textit{Components} dargestellt. Ihre Aufgabe besteht darin, bestimmte
 Funktionen bereitzustellen, wenn sie einer \textit{Entity} zugeordnet sind.
 Alle \textit{Entities}, die erstellt wurden und erstellt werden, werden vom
-\textit{Manager (System)} gesteuert (verwaltet). \\
+\textit{Manager (System)} gesteuert (verwaltet).
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.3]{Scheme}
   \caption{Entity-Component-System Verhältnisse}
