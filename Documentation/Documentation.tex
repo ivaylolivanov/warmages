@@ -20,7 +20,7 @@
 \renewcommand{\figurename}{Abb.}
 
 \title{IT Projekt}
-\date{06.05.2019}
+\date{16.05.2019}
 \author{Ivaylo Lenkov Ivanov}
 
 \begin{document}
@@ -580,24 +580,24 @@ else if(transform->getXPos() > Game::camera.x + Game::camera.w ||
 \end{lstlisting}
 
 \section{Fazit}
-Ziel des Projekts war es, die gängigsten physikalischen Gesetze in eine
-virtuelle Umgebung umzusetzen. Als Ergebnis wurde ein einfaches Spiel erstellt,
-in dem die Implementierung demonstriert wurde. Der Benutzer interagiert mit der
-virtuellen Welt über eine Avatar-Figur, die er steuert. Die Hauptfigur des
+Das Ziel des Projekts ist es, die bekannten Gesetze der Physik in eine virtuelle
+Umgebung umzusetzen. Als Ergebnis wurde ein einfaches Spiel erstellt, in dem die
+Implementierung diesen Gesetze demonstriert wurde. Der Benutzer interagiert mit
+der virtuellen Welt durch eine Avatar-Figur, die er steuert. Die Hauptfigur des
 Spiels bewegt sich, wie es die implementierte Physik demonstriert ---
-Beschleunigung, Kollisionserkennung und -auflösung, einfache Partikel. \\
-Um die Einführung der Physik in das Spiel und die Pflege der Daten zu
-vereinfachen, wurde eine einfache Konstruktion ähnlich dem Designmuster
+Beschleunigung, Kollisionserkennung und --- Auflösung, einfache Partikel. \\
+Um die Einführung der Physik in dem Spiel und die Pflege der Daten zu
+vereinfachen, wurde eine einfache Konstruktion ähnlich zu dem Design-muster
 ``Entity-Component-System'' entwickelt. \\
-Die Physik ist so einfach wie möglich implementiert. Aufgrund dieses Spiels
-bleiben Objekte mit geringerer Masse, die beschleunigt und gegen ein Objekt mit
-größerer Masse gestoßen werden, ineinander stecken. Die implementierte
-Kollisionserkennung würde auch abnehmen, wenn eine genauere Erkennung
-erforderlich ist. \\
+Die Physik ist so einfach wie möglich implementiert. Auf Grund dieses Spiels,
+wenn die Objekte  die geringerer Masse besitzen, beschleunigt werden, und gegen
+Objekte mit größere Masse gestoßen werden, bleiben die zwei Objekte ineinander
+gesteckt. Die implementierte Kollisionserkennung würde auch abnehmen, wenn eine
+genauere Erkennung erfordert ist. \\
 Das Projekt ist der Einstieg in die Computerphysik. Von diesem Punkt an könnte
-man sich auf das Polieren des implementierten Algorithmus konzentrieren, so dass
-die Implementierungen in einem breiteren Bereich von Fällen anwendbar sind. Es
-ist auch eine gültige Entwicklung, einen Teil des Gesetzes über die optische
-Physik umzusetzen.
+man sich auf die Verbesserung des implementierten Algorithmus konzentrieren, so
+dass die Implementierungen in einem breiteren Bereich von Fällen anwendbar sind.
+Es wäre auch eine gültige Entwicklung, wenn auch die Gesetze der optische Phyzik
+angewendet werden.
 
 \end{document}
